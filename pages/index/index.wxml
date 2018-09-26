@@ -7,67 +7,25 @@
     </block>
     <block wx:else>
       <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      <!-- <text class="userinfo-nickname">{{userInfo.nickName}}</text> -->
     </block>
   </view>
-  <view class="mark-header-con">
-    <button class="new-mark-btn" bindtap="newOne">新标注</button>
+  <view class="home-header-con">
     <view class="search-mark-con">
       <input confirm-type="search" class="search-mark-input" value="{{searchValue}}" placeholder="请输入完整的公司名称" type="text" bindinput="getSearchVal" bindconfirm="searchOne"></input>
       <button type="search" class="search-mark-btn" bindtap='searchOne'>搜索</button>
     </view>
   </view>
-  <view class="mark-body-title">
-    <text class="row-td-left"></text>
-    <text class="row-td-center">原文</text>
-    <text class="row-td-right">操作</text>
+  <view class="home-body-con">
+    <scroll-view scroll-y="true" style="height:600px" bindscrolltolower="lower">
+      <block wx:for="{{mockList}}">
+        <navigator url="/pages/detail/detail?id={{item.id}}" hover-class="navigator-hover">
+          <image src="{{item.icon}}" class="pic"></image>
+          <view class="right">
+            <text class="title">{{item.name}}</text>
+          </view>
+        </navigator>
+      </block>
+    </scroll-view>
   </view>
-  <!-- <form bindsubmit="formSubmit" bindreset="formReset"> -->
-  <view class="mark-body-con">
-    <view class="mark-body-row">
-      <text class="row-td-left">公司名称</text>
-      <text class="row-td-center">{{company.companyName}}</text>
-      <icon class="iconfont row-td-right {{arrows.hiddenName ?  'icon-jiantouxia': 'icon-jiantoushang'}}" data-key="hiddenName" bindtap="toggleInput"></icon>
-    </view>
-    <view class="mark-con-row" hidden="{{arrows.hiddenName}}">
-      <text>纠错：</text>
-      <input class="row-td-input" value="{{inputVal.nameVal}}" bindinput="getCompanyName"></input>
-    </view>
-    <view class="mark-body-row">
-      <text class="row-td-left">公司简称</text>
-      <text class="row-td-center">{{company.companyShortName}}</text>
-      <icon class="iconfont row-td-right {{arrows.hiddenShortName ?  'icon-jiantouxia': 'icon-jiantoushang'}}" data-key="hiddenShortName" bindtap="toggleInput"></icon>
-    </view>
-    <view class="mark-con-row" hidden="{{arrows.hiddenShortName}}">
-      <text>纠错：</text>
-      <input class="row-td-input" value="{{inputVal.shortNameVal}}" bindinput="getCompanyShortName"></input>
-    </view>
-    <view class="mark-body-row">
-      <text class="row-td-left">简介</text>
-      <text class="row-td-center">{{company.companyAbout}}</text>
-      <icon class="iconfont row-td-right {{arrows.hiddenAbout ?  'icon-jiantouxia': 'icon-jiantoushang'}}" data-key="hiddenAbout" bindtap="toggleInput"></icon>
-    </view>
-    <view class="mark-con-row" hidden="{{arrows.hiddenAbout}}">
-      <text>纠错：</text>
-      <input class="row-td-input" value="{{inputVal.aboutVal}}" bindinput="getCompanyAbout"></input>
-    </view>
-    <view class="mark-body-row">
-      <text class="row-td-left">关键词</text>
-      <text class="row-td-center">{{company.keyWord}}</text>
-      <icon class="iconfont row-td-right {{arrows.hiddenKeyWord ?  'icon-jiantouxia': 'icon-jiantoushang'}}" data-key="hiddenKeyWord" bindtap="toggleInput"></icon>
-    </view>
-    <view class="mark-con-row" hidden="{{arrows.hiddenKeyWord}}">
-      <text>纠错：</text>
-      <input class="row-td-input" value="{{inputVal.keyWordVal}}" bindinput="getKeyWord">
-      </input>
-    </view>
-  </view>
-  <view class="mark-footer-con">
-    <button class="save-mark" bindtap="saveOne">保存</button>
-    <button class="reset-mark" bindtap="clearInputs">取消</button>
-  </view>
-  <!-- </form> -->
-  <modal hidden="{{isHideDialog}}" title="请配置服务地址" confirm-text="确认" cancel-text="取消" bindcancel="cancel" bindconfirm="confirm">
-    <input type='text' placeholder="请输入地址" bindinput="getUrl" />
-  </modal>
 </view>

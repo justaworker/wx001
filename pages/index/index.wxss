@@ -2,25 +2,19 @@
   padding: 50rpx 0;
 }
 
-.mark-header-con, .mark-body-con, .mark-body-title {
+.home-header-con, .home-body-con {
   width: 96%;
 }
-
-.mark-header-con {
+.pic{
+  width: 150rpx;
+  height: 150rpx;
+}
+.right{
+  float: right;
+}
+.home-header-con {
   display: flex;
   justify-content: space-between;
-}
-
-.mark-body-title {
-  height: 100rpx;
-  border-top: 1rpx solid rgb(125, 133, 125);
-  display: flex;
-  align-items: center;
-  margin-top: 30rpx;
-}
-
-.mark-body-title .row-td-left {
-  margin-left: 10rpx;
 }
 
 .search-mark-btn {
@@ -28,7 +22,7 @@
   height: 60rpx;
   width: 140rpx;
   font-size: 30rpx;
-  display: inline-block;
+  /* display: inline-block; */
 }
 
 .search-mark-con {
@@ -38,21 +32,16 @@
   line-height: 60rpx;
   height: 60rpx;
   font-size: 30rpx;
+  display: flex;
+  width: 100%;
 }
 
 .search-mark-input {
-  display: inline-block;
+  /* display: inline-block; */
   padding: 0 10rpx;
+  width: 100%;
 }
 
-.new-mark-btn {
-  width: 180rpx;
-  line-height: 60rpx;
-  height: 60rpx;
-  font-size: 30rpx;
-  display: inline-block;
-  margin: 0rpx;
-}
 
 .mark-body-row {
   padding: 10rpx;
@@ -82,16 +71,6 @@
   text-align: center;
 }
 
-.save-mark, .reset-mark {
-  font-size: 30rpx;
-  margin-left: 30rpx;
-}
-
-.mark-footer-con {
-  display: flex;
-  margin-top: 30rpx;
-}
-
 .mark-con-row {
   padding: 0 10rpx;
   display: flex;
@@ -106,14 +85,6 @@
   width: 110rpx;
 }
 
-.mark-con-row .row-td-input {
-  font-size: 30rpx;
-  padding-left: 10rpx;
-  border: none;
-  line-height: 60rpx;
-  height: 60rpx;
-  width: 100%;
-}
 
 .user-info-con {
   display: flex;
@@ -142,26 +113,4 @@
 .user-info-con .userinfo-nickname {
   color: #aaa;
   font-size: 30rpx;
-}
-
-@font-face {
-  font-family: "iconfont";
-  src: url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAV4AAsAAAAAB/gAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFZW7kgaY21hcAAAAYAAAABkAAABlM6OnpdnbHlmAAAB5AAAAZAAAAG8cMWn32hlYWQAAAN0AAAALgAAADYSGUYgaGhlYQAAA6QAAAAcAAAAJAfeA4VobXR4AAADwAAAABAAAAAQD+kAAGxvY2EAAAPQAAAACgAAAAoBVACsbWF4cAAAA9wAAAAfAAAAIAETAF1uYW1lAAAD/AAAAUUAAAJtPlT+fXBvc3QAAAVEAAAAMQAAAEf5RDqHeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2Bk/sU4gYGVgYOpk+kMAwNDP4RmfM1gxMjBwMDEwMrMgBUEpLmmMDgwVDzTY27438AQw9zA0AAUZgTJAQAnbAyceJzFkMENgCAQBOdEeRhLEV5W48syqJg2dDn4WAGbDJtdCJADNiCIU6xgD0bTrda8D+zer2TlKDcWSs3vq1xqctcR7UX3pd1okWmyeU//dfh6jdTmXAb6Yk0dzYuaO4QPikIOh3icNY8/b9NAGMbvOffOdont3jmx48t/H8mB4kTCCUWlIlnoQNShEhNjpSyVChJTF4YuSB0qhEQ+AULiGzBlz8SHQPA5DlxVvHr1Sr/l+b0PYYT8/eVsnSaJySPyhLwkZ4SAj5GHtIOBmU/pGI0Ba6T10DHaDFydT50XSHNeT8rD+SjlLo8QoovZoDw0U2rwdL6gxyiTDpC11Gs5bEvnM/abpvvRruhXNHq6HS0m9lWxrJf92LuqSZlJeetxxjxK96IQb9PEZ/4+t99YpBrb3mPaQy0z6vRN0G/J85v5u84w9YHra8Stfvh9KZSo9oNKYpm5B4HXVIF+WMfVnwfNuNYZ/SbV4O44P+matAkZ5gZmpHPuVs+bKZ5hUXVIkXA3hPOpJe0ucmssZvaHmAhBA6yS5cmxwtEBE36yFnjv7bnMbgQCUUhcKoWushtZSMb/u3b0gmT3rtECSXpnKO9NLrgpNeUnM7sVTE8EVizyhcCRmGgm7G586mA9w6Us8go3jENUwHQh7JfntEr/ByXEQpB4nGNgZGBgAGIOhhmz4/ltvjJwszCAwPVaRlEE/f8hCwOzBANIGRNIFADf3QfJAAB4nGNgZGBgbvjfwBDDwgACQJKRARWwAABHCgJtBAAAAAPpAAAEAAAABAAAAAAAAAAAdgCsAN4AAHicY2BkYGBgYQhkYGUAASYg5gJCBob/YD4DABESAXEAeJxlj01OwzAQhV/6B6QSqqhgh+QFYgEo/RGrblhUavdddN+mTpsqiSPHrdQDcB6OwAk4AtyAO/BIJ5s2lsffvHljTwDc4Acejt8t95E9XDI7cg0XuBeuU38QbpBfhJto41W4Rf1N2MczpsJtdGF5g9e4YvaEd2EPHXwI13CNT+E69S/hBvlbuIk7/Aq30PHqwj7mXle4jUcv9sdWL5xeqeVBxaHJIpM5v4KZXu+Sha3S6pxrW8QmU4OgX0lTnWlb3VPs10PnIhVZk6oJqzpJjMqt2erQBRvn8lGvF4kehCblWGP+tsYCjnEFhSUOjDFCGGSIyujoO1Vm9K+xQ8Jee1Y9zed0WxTU/3OFAQL0z1xTurLSeTpPgT1fG1J1dCtuy56UNJFezUkSskJe1rZUQuoBNmVXjhF6XNGJPyhnSP8ACVpuyAAAAHicY2BigAAuBuyAhZGJkZmRhZGVgbGCJyszMa8kv7Q4IzEvnQvKqchMZGAAAJaoCfkAAAA=') format('woff'),
-         url('iconfont.ttf?t=1532420117729') format('truetype'); /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-}
-
-.iconfont {
-  font-family: "iconfont" !important;
-  font-size: 16px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-jiantoushang:after {
-  content: "\e62d";
-}
-
-.icon-jiantouxia:after {
-  content: "\e62e";
 }

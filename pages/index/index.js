@@ -7,23 +7,48 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     serverHttp: 'http://58.213.91.74:21381/springbootdemo-0.0.1-SNAPSHOT', // 默认请求地址
-    searchVal: '', // 绑定查询输入框数据
-    searchValue: '', // 查询输入框赋值
-    companyName: '', // 绑定公司名称纠错输入框数据
-    companyShortName: '',
-    companyAbout: '',
-    keyWord: '',
-    company: {}, // 原文咋展示赋值
-    isHideDialog: true,
-    dialogUrl: '', // 配置请求地址
-    inputVal: {}, // 纠错输入框赋值
-    arrows: { // 纠错输入框展示、隐藏
-      hiddenName: true,
-      hiddenShortName: true,
-      hiddenAbout: true,
-      hiddenKeyWord: true
-    },
-    animation: ''
+    animation: '',
+    mockList: [{
+        id: '001',
+        icon: '../../images/home_s.png',
+        name: 'test001'
+      },
+      {
+        id: '002',
+        icon: '../../images/home_s.png',
+        name: 'test002'
+      },
+      {
+        id: '003',
+        icon: '../../images/home_s.png',
+        name: 'test003'
+      },
+      {
+        id: '004',
+        icon: '../../images/home_s.png',
+        name: 'test004'
+      },
+      {
+        id: '005',
+        icon: '../../images/home_s.png',
+        name: 'test005'
+      },
+      {
+        id: '006',
+        icon: '../../images/home_s.png',
+        name: 'test006'
+      },
+      {
+        id: '007',
+        icon: '../../images/home_s.png',
+        name: 'test007'
+      },
+      {
+        id: '008',
+        icon: '../../images/home_s.png',
+        name: 'test008'
+      },
+    ]
   },
   //事件处理函数
   bindViewTap: function() {
