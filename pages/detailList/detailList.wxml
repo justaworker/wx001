@@ -19,16 +19,13 @@
   </view>
   <view class="category-con">
     <view class="left-con">
-      <text class="category-name" wx:for="{{categoryList}}" data-name="{{item}}" bindtap="tapName">{{item}}</text>
+      <text class="category-name" wx:for="{{categoryList}}">{{item}}</text>
     </view>
     <view class="right-con">
       <text class="category-name">{{'关联数据'}}</text>
     </view>
   </view>
-  <view wx:if="{{isShowContent}}" class="content-con">
-    {{content.id}} {{content.text}}
-  </view>
-  <view wx:else class="list-con">
+  <view class="scroll-con">
     <scroll-view scroll-y="true" style="height:400px" bindscrolltolower="lower">
       <block wx:for="{{mockList}}">
         <navigator url="/pages/detail/detail?id={{item.id}}" hover-class="navigator-hover">

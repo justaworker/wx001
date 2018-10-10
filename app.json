@@ -1,15 +1,16 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
-    "pages/logs/logs",
+    "pages/searchList/searchList",
     "pages/user/user",
-    "pages/detail/detail"
+    "pages/detail/detail",
+    "pages/detailList/detailList"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "风图数据",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
   },
   "tabBar": {
     "color": "#a9b7b7",
@@ -25,7 +26,7 @@
       {
         "selectedIconPath": "images/search_s.png",
         "iconPath": "images/search.png",
-        "pagePath": "pages/logs/logs",
+        "pagePath": "pages/searchList/searchList",
         "text": "搜索"
       },
       {

@@ -8,54 +8,42 @@ Page({
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     serverHttp: 'http://58.213.91.74:21381/springbootdemo-0.0.1-SNAPSHOT', // 默认请求地址
     animation: '',
-    categoryList: ['企业', '人才', '资金', '政策'],
+    // categoryList: ['企业', '人才', '资金', '政策'],
     mockList: [{
         id: '001',
         icon: '../../images/home_s.png',
-        name: 'test001',
-        updateTime: new Date()
+        name: '视图标题001',
+        updateTime: '2018-10-02'
       },
       {
         id: '002',
         icon: '../../images/home_s.png',
-        name: 'test002',
-        updateTime: new Date()
+        name: '视图标题002',
+        updateTime: '2018-10-02'
       },
       {
         id: '003',
         icon: '../../images/home_s.png',
-        name: 'test003',
-        updateTime: new Date()
+        name: '视图标题003',
+        updateTime: '2018-10-02'
       },
       {
         id: '004',
         icon: '../../images/home_s.png',
-        name: 'test004',
-        updateTime: new Date()
+        name: '视图标题004',
+        updateTime: '2018-10-02'
       },
       {
         id: '005',
         icon: '../../images/home_s.png',
-        name: 'test005',
-        updateTime: new Date()
+        name: '视图标题005',
+        updateTime: '2018-10-02'
       },
       {
         id: '006',
         icon: '../../images/home_s.png',
-        name: 'test006',
-        updateTime: new Date()
-      },
-      {
-        id: '007',
-        icon: '../../images/home_s.png',
-        name: 'test007',
-        updateTime: new Date()
-      },
-      {
-        id: '008',
-        icon: '../../images/home_s.png',
-        name: 'test008',
-        updateTime: new Date()
+        name: '视图标题006',
+        updateTime: '2018-10-02'
       },
     ]
   },

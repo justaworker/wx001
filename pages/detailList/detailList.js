@@ -12,16 +12,11 @@ Page({
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     obj: {
       id: '001',
-      name: '公司名称或人才名称',
+      name: '视图标题001',
       icon: '../../images/home_s.png',
       updateTime: '2018-10-02'
     },
-    categoryList: ['基本信息', '连接节点'],
-    content: {
-      id: 'null',
-      text: '专业方向 工作单位 论文列表'
-    },
-    isShowContent: true,
+    categoryList: ['企业', '人才', '资金', '政策'],
     mockList: [{
         id: '001',
         icon: '../../images/user_s.png',
@@ -39,6 +34,18 @@ Page({
         icon: '../../images/user_s.png',
         name: '公司003',
         label: '公司标签 公司标签 公司标签'
+      },
+      {
+        id: '004',
+        icon: '../../images/user_s.png',
+        name: '公司004',
+        label: '公司标签 公司标签 公司标签'
+      },
+      {
+        id: '005',
+        icon: '../../images/user_s.png',
+        name: '公司005',
+        label: '公司标签 公司标签 公司标签'
       }
     ]
   },
@@ -48,9 +55,7 @@ Page({
    */
   onLoad: function(options) {
     this.setData({
-      content: {
-        id: options.id
-      }
+      text: options.id
     });
     if (app.globalData.userInfo) {
       this.setData({
@@ -93,12 +98,7 @@ Page({
       fail: resfail => console.log(resfail)
     });
   },
-  tapName: function(e) {
-    this.setData({
-      isShowContent: e.currentTarget.dataset.name === '基本信息'
-    });
 
-  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

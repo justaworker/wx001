@@ -45,13 +45,8 @@
 }
 
 .category-name {
-  /* float: left; */
+  float: left;
   margin-left: 30rpx;
-}
-
-.category-name:hover {
-  background-color: #aaa;
-  color: blue;
 }
 
 .obj-con {
@@ -75,15 +70,11 @@
   flex-basis: 1;
 }
 
-.content-con {
+.scroll-con {
   width: 100%;
 }
 
-.list-con {
-  width: 100%;
-}
-
-.list-con navigator {
+.scroll-con navigator {
   display: flex;
   margin-top: 30rpx;
   width: 100%;

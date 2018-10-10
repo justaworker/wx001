@@ -10,25 +10,16 @@
       <!-- <text class="userinfo-nickname">{{userInfo.nickName}}</text> -->
     </block>
   </view>
-  <view class="obj-con">
-    <image src="{{obj.icon}}" class="pic"></image>
-    <view class="right">
-      <view class="title">{{obj.name}}</view>
-      <view class="updateTime">更新时间：{{obj.updateTime}}</view>
+  <view class="search-con">
+    <view class="search-mark-con">
+      <input confirm-type="search" class="search-mark-input" placeholder="请输入完整的公司名称" type="text"></input>
+      <button type="search" class="search-mark-btn" bindtap='searchOne'>搜索</button>
     </view>
   </view>
   <view class="category-con">
-    <view class="left-con">
-      <text class="category-name" wx:for="{{categoryList}}" data-name="{{item}}" bindtap="tapName">{{item}}</text>
-    </view>
-    <view class="right-con">
-      <text class="category-name">{{'关联数据'}}</text>
-    </view>
+    <text class="category-name" wx:for="{{categoryList}}">{{item}}</text>
   </view>
-  <view wx:if="{{isShowContent}}" class="content-con">
-    {{content.id}} {{content.text}}
-  </view>
-  <view wx:else class="list-con">
+  <view class="scroll-con">
     <scroll-view scroll-y="true" style="height:400px" bindscrolltolower="lower">
       <block wx:for="{{mockList}}">
         <navigator url="/pages/detail/detail?id={{item.id}}" hover-class="navigator-hover">
@@ -40,5 +31,8 @@
         </navigator>
       </block>
     </scroll-view>
+  </view>
+  <view class="search-btn">
+    <button type="primary" disabled="false" bindtap="primary"> 搜索更多 </button>
   </view>
 </view>

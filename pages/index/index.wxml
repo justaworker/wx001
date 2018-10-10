@@ -16,15 +16,15 @@
       <button type="search" class="search-mark-btn" bindtap='searchOne'>搜索</button>
     </view>
   </view>
-  <block wx:if="{{categoryList.length > 0}}">
+  <!-- <block wx:if="{{categoryList.length > 0}}">
     <view class="category">
       <text class="category-name" wx:for="{{categoryList}}">{{item}}</text>
     </view>
-  </block>
+  </block> -->
   <view class="home-body-con">
     <scroll-view scroll-y="true" style="height:400px" bindscrolltolower="lower">
       <block wx:for="{{mockList}}">
-        <navigator url="/pages/detail/detail?id={{item.id}}" hover-class="navigator-hover">
+        <navigator url="/pages/detailList/detailList?id={{item.id}}" hover-class="navigator-hover">
           <image src="{{item.icon}}" class="pic"></image>
           <view class="right">
             <view class="title">{{item.name}}</view>
