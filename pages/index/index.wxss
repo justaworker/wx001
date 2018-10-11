@@ -9,11 +9,19 @@
 .pic {
   width: 100rpx;
   height: 100rpx;
+  border-radius: 20rpx;
+  border: 1px solid black;
 }
 
 .right {
-  width: 600rpx;
+  /* width: 600rpx; */
   height: 100rpx;
+  font-size: 30rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-sizing: border-box;
+  margin-left: 20rpx;
 }
 
 .home-header-con {
@@ -44,48 +52,6 @@
   /* display: inline-block; */
   padding: 0 10rpx;
   width: 100%;
-}
-
-.mark-body-row {
-  padding: 10rpx;
-  display: flex;
-  align-items: center;
-  margin-top: 15rpx;
-}
-
-.row-td-left, .row-td-center, .row-td-right {
-  display: inline-block;
-  font-size: 30rpx;
-}
-
-.row-td-left {
-  width: 220rpx;
-  padding-left: 20rpx;
-}
-
-.row-td-center {
-  width: 100%;
-  overflow: hidden;
-  padding-left: 20rpx;
-}
-
-.row-td-right {
-  width: 110rpx;
-  text-align: center;
-}
-
-.mark-con-row {
-  padding: 0 10rpx;
-  display: flex;
-  align-items: center;
-  border: 1px solid #ddd;
-  margin: 0 20rpx 20rpx;
-  border-radius: 10rpx;
-}
-
-.mark-con-row text {
-  font-size: 30rpx;
-  width: 110rpx;
 }
 
 .user-info-con {
@@ -120,20 +86,19 @@
 navigator {
   display: flex;
   margin-top: 30rpx;
+  padding: 10rpx;
 }
 
 .updateTime {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  width: 600rpx;
 }
 
 .title {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  width: 600rpx;
 }
 
 /* .category {

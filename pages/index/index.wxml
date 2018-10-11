@@ -22,7 +22,7 @@
     </view>
   </block> -->
   <view class="home-body-con">
-    <scroll-view scroll-y="true" style="height:400px" bindscrolltolower="lower">
+    <scroll-view scroll-y="true" bindscrolltolower="lower">
       <block wx:for="{{mockList}}">
         <navigator url="/pages/detailList/detailList?id={{item.id}}" hover-class="navigator-hover">
           <image src="{{item.icon}}" class="pic"></image>
