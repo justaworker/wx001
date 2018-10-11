@@ -67,13 +67,13 @@ Page({
         serverHttp: options.http
       });
     }
-    this.getOne();
+    // this.getOne();
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       });
-      this.loginRecord(app.globalData.userInfo.nickName);
+      // this.loginRecord(app.globalData.userInfo.nickName);
 
     } else if (this.data.canIUse) {
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
@@ -133,12 +133,12 @@ Page({
     wx.getUserInfo({
       success: res => {
         app.globalData.userInfo = res.userInfo
-        console.log(res.userInfo);
+        // console.log(res.userInfo);
         that.setData({
           userInfo: res.userInfo,
           hasUserInfo: true
         });
-        that.loginRecord(res.userInfo.nickName);
+        // that.loginRecord(res.userInfo.nickName);
       },
       fail: resfail => console.log(resfail)
     });

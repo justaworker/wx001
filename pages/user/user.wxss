@@ -1,8 +1,142 @@
-.log-list {
+/* pages/detail/detail.wxss */
+
+.container {
+  padding: 50rpx 20px;
+  display: flex;
+}
+
+.pic {
+  width: 100rpx;
+  height: 100rpx;
+}
+
+.user-info-con {
+  display: flex;
+  align-items: center;
+  width: 95%;
+  margin-bottom: 50rpx;
+  overflow: hidden;
+  justify-content: flex-end;
+}
+
+.user-info-con .user-info-btn {
+  height: 60rpx;
+  line-height: 60rpx;
+  width: 220rpx;
+  font-size: 30rpx;
+  margin: 0rpx;
+  padding: 0rpx;
+}
+
+.user-info-con .userinfo-avatar {
+  height: 60rpx;
+  width: 60rpx;
+  border-radius: 50%;
+}
+
+.user-info-con .userinfo-nickname {
+  color: #aaa;
+  font-size: 30rpx;
+}
+
+.category {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.category-name {
+  /* float: left; */
+  margin-left: 30rpx;
+}
+
+.category-name:hover {
+  background-color: #aaa;
+  color: blue;
+}
+
+.obj-con {
+  display: flex;
+  width: 100%;
+}
+
+.category-con {
+  display: flex;
+  width: 100%;
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  justify-content: space-around;
+}
+
+.category-con .left-con {
+  flex-basis: 4;
+}
+
+.category-con .right-con {
+  flex-basis: 1;
+}
+
+.content-con {
+  width: 100%;
+  font-size: 30rpx;
+}
+
+.list-con {
+  width: 100%;
+}
+
+.list-con navigator {
+  display: flex;
+  margin-top: 30rpx;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.edit-con {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 40rpx;
 }
-.log-item {
-  margin: 10rpx;
+
+.btn-con {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.textarea-con {
+  margin-top: 20px;
+  display: flex;
+}
+.textarea-con textarea{
+  width: 100%;
+  padding: 10rpx;
+}
+.images-con {
+  margin-top: 20px;
+  display: flex;
+}
+
+.images-con .image-con {
+  position: relative;
+}
+.images-con .image {
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.image-con .image-remover {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+}
+
+.images-con .image-add {
+  background-color: rgba(0, 0, 0, 0.1);
 }
