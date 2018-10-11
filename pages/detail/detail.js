@@ -10,6 +10,7 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    curContent: '基本信息',
     obj: {
       id: '001',
       name: '公司名称或人才名称',
@@ -17,11 +18,11 @@ Page({
       updateTime: '2018-10-02'
     },
     categoryList: ['基本信息', '连接节点'],
+    images: [],
     content: {
       id: 'null',
       text: '专业方向 工作单位 论文列表'
     },
-    isShowContent: true,
     mockList: [{
         id: '001',
         icon: '../../images/user_s.png',
@@ -93,12 +94,63 @@ Page({
       fail: resfail => console.log(resfail)
     });
   },
+
   tapName: function(e) {
     this.setData({
-      isShowContent: e.currentTarget.dataset.name === '基本信息'
+      curContent: e.currentTarget.dataset.name
     });
 
   },
+
+  chooseImage: function(e) {
+    var that = this;
+    wx.chooseImage({
+      // count: 1,
+      // sizeType: [],
+      // sourceType: [],
+      success: function(res) {
+        // const tempFilePaths = res.tempFilePaths;
+        const images = that.data.images.concat(res.tempFilePaths);
+        // 限制最多只能留下3张照片
+        // this.data.images = images.length <= 3 ? images : images.slice(0, 3) 
+        that.setData({
+          images: images.length <= 3 ? images : images.slice(0, 3)
+        });
+        // wx.uploadFile({
+        //   url: 'https://example.weixin.qq.com/upload', //仅为示例，非真实的接口地址
+        //   filePath: tempFilePaths[0],
+        //   name: 'file',
+        //   formData: {
+        //     'user': 'test'
+        //   },
+        //   success(res) {
+        //     const data = res.data
+        //     //do something
+        //   }
+        // })
+      },
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+  },
+
+  removeImage(e) {
+    const idx = e.target.dataset.idx;
+    this.data.images.splice(idx, 1);
+    this.setData({
+      images: this.data.images
+      });
+  },
+
+  handleImagePreview(e) {
+    const idx = e.target.dataset.idx
+    const images = this.data.images
+    wx.previewImage({
+      current: images[idx],  //当前预览的图片
+      urls: images,  //所有要预览的图片
+    })
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
