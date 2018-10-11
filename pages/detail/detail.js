@@ -48,6 +48,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    var that = this;
+    wx.login({
+      success: function(res){
+        console.log('code:  ' + res.code);
+      }
+    })
     this.setData({
       content: {
         id: options.id
