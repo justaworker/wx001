@@ -49,11 +49,6 @@ Page({
    */
   onLoad: function(options) {
     var that = this;
-    wx.login({
-      success: function(res){
-        console.log('code:  ' + res.code);
-      }
-    })
     this.setData({
       content: {
         id: options.id

@@ -7,6 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    uploadPop: false,
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
@@ -39,6 +40,48 @@ Page({
         id: '004',
         icon: '../../images/user_s.png',
         name: '公司004',
+        label: '公司标签 公司标签 公司标签'
+      },
+      {
+        id: '005',
+        icon: '../../images/user_s.png',
+        name: '公司005',
+        label: '公司标签 公司标签 公司标签'
+      },
+      {
+        id: '005',
+        icon: '../../images/user_s.png',
+        name: '公司005',
+        label: '公司标签 公司标签 公司标签'
+      },
+      {
+        id: '005',
+        icon: '../../images/user_s.png',
+        name: '公司005',
+        label: '公司标签 公司标签 公司标签'
+      },
+      {
+        id: '005',
+        icon: '../../images/user_s.png',
+        name: '公司005',
+        label: '公司标签 公司标签 公司标签'
+      },
+      {
+        id: '005',
+        icon: '../../images/user_s.png',
+        name: '公司005',
+        label: '公司标签 公司标签 公司标签'
+      },
+      {
+        id: '005',
+        icon: '../../images/user_s.png',
+        name: '公司005',
+        label: '公司标签 公司标签 公司标签'
+      },
+      {
+        id: '005',
+        icon: '../../images/user_s.png',
+        name: '公司005',
         label: '公司标签 公司标签 公司标签'
       },
       {
@@ -146,5 +189,63 @@ Page({
    */
   onShareAppMessage: function() {
 
-  }
+  },
+  /**
+   * 用户点击上传
+   */
+  toggleUploadPop: function() {
+    this.setData({
+      uploadPop: !this.data.uploadPop
+    });
+  },
+  
+  chooseImage: function(e) {
+    var that = this;
+    wx.chooseImage({
+      // count: 1,
+      // sizeType: [],
+      // sourceType: [],
+      success: function(res) {
+        // const tempFilePaths = res.tempFilePaths;
+        const images = that.data.images.concat(res.tempFilePaths);
+        // 限制最多只能留下3张照片
+        // this.data.images = images.length <= 3 ? images : images.slice(0, 3) 
+        that.setData({
+          images: images.length <= 3 ? images : images.slice(0, 3)
+        });
+        // wx.uploadFile({
+        //   url: 'https://example.weixin.qq.com/upload', //仅为示例，非真实的接口地址
+        //   filePath: tempFilePaths[0],
+        //   name: 'file',
+        //   formData: {
+        //     'user': 'test'
+        //   },
+        //   success(res) {
+        //     const data = res.data
+        //     //do something
+        //   }
+        // })
+      },
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+  },
+
+  removeImage(e) {
+    const idx = e.target.dataset.idx;
+    this.data.images.splice(idx, 1);
+    this.setData({
+      images: this.data.images
+    });
+  },
+
+  handleImagePreview(e) {
+    const idx = e.target.dataset.idx
+    const images = this.data.images
+    wx.previewImage({
+      current: images[idx], //当前预览的图片
+      urls: images, //所有要预览的图片
+    })
+  },
+
 })

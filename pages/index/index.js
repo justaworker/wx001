@@ -1,4 +1,6 @@
 //index.js
+// 引入配置文件config
+const urlList = require('../../utils/config.js');
 //获取应用实例
 const app = getApp()
 Page({
@@ -47,27 +49,8 @@ Page({
       },
     ]
   },
-  //事件处理函数
-  bindViewTap: function() {
-    // wx.navigateTo({
-    //   url: '../logs/logs'
-    // })
-  },
   onLoad: function(options) {
-    // 获取缓存的服务IP
-    if (wx.getStorageSync('serverIP')) {
-      this.setData({
-        serverHttp: wx.getStorageSync('serverIP')
-      });
-    }
-    // 优先使用设置的服务IP
-    if (options.http) {
-      wx.setStorageSync('serverIP', options.http);
-      this.setData({
-        serverHttp: options.http
-      });
-    }
-    // this.getOne();
+    // this.login();
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -88,11 +71,12 @@ Page({
       // 在没有 open-type=getUserInfo 版本的兼容处理
       wx.getUserInfo({
         success: res => {
-          app.globalData.userInfo = res.userInfo
+          app.globalData.userInfo = res.userInfo;
           this.setData({
             userInfo: res.userInfo,
             hasUserInfo: true
-          })
+          });
+
         }
       });
     }
@@ -138,7 +122,8 @@ Page({
           userInfo: res.userInfo,
           hasUserInfo: true
         });
-        // that.loginRecord(res.userInfo.nickName);
+        const { iv, encryptedData} = res;
+        that.login(iv, encryptedData);
       },
       fail: resfail => console.log(resfail)
     });
@@ -149,199 +134,46 @@ Page({
       searchVal: e.detail.value
     });
   },
-  //实时获取纠错输入框值
-  getCompanyName: function(e) {
-    this.setData({
-      companyName: e.detail.value
-    });
-  },
-  getCompanyShortName: function(e) {
-    this.setData({
-      companyShortName: e.detail.value
-    });
-  },
-  getCompanyAbout: function(e) {
-    this.setData({
-      companyAbout: e.detail.value
-    });
-  },
-  getKeyWord: function(e) {
-    this.setData({
-      keyWord: e.detail.value
-    });
-  },
-  // 搜索记录
-  searchOne: function() {
-    if (this.data.searchVal === '#1234#') {
-      // 设置IP
-      this.setData({
-        isHideDialog: false
-      });
-    } else if (this.data.searchVal === '#123456#') {
-      // 还原默认IP
-      wx.setStorageSync('serverIP', '');
-      this.setData({
-        serverHttp: 'http://58.213.91.74:21381/springbootdemo-0.0.1-SNAPSHOT'
-      });
-    } else {
-      this.queryRecord({
-        condition: this.data.searchVal
-      }, (res) => {
-        this.clearInputs();
-        this.hideInputs();
-        this.setData({
-          searchValue: ''
-        });
-      });
-
-    }
-  },
-  // 随机一条记录
-  newOne: function() {
-    this.clearInputs();
-    this.hideInputs();
-    this.getOne();
-  },
-  // 页面初始获取记录
-  getOne: function() {
-    this.queryRecord();
-  },
-  //保存记录纠错
-  saveOne: function() {
-    var oldSeq = this.data.company.seq;
-    var req = {
-      userID: this.data.userInfo.nickName || '游客',
-      company: {
-        oldSeq: oldSeq,
-        companyName: this.data.companyName,
-        companyShortName: this.data.companyShortName,
-        keyWord: this.data.keyWord,
-        companyAbout: this.data.companyAbout,
-      }
-    };
-    this.saveRecord(req);
-  },
-  // 清空纠错输入框内容
-  clearInputs: function() {
-    console.log(this.data.inputVal);
-    this.setData({
-      inputVal: {},
-      companyName: '',
-      companyShortName: '',
-      keyWord: '',
-      companyAbout: ''
-    });
-  },
-  // 展示、隐藏纠错输入框
-  toggleInput: function(e) {
-    var key = e.currentTarget.dataset.key;
-    var arrows = this.data.arrows;
-    arrows[key] = !arrows[key];
-    this.setData({
-      arrows: arrows
-    });
-  },
-  //隐藏所有纠错输入框
-  hideInputs: function(e) {
-    this.setData({
-      arrows: {
-        hiddenName: true,
-        hiddenShortName: true,
-        hiddenAbout: true,
-        hiddenKeyWord: true
-      }
-    });
-  },
   //登录接口
-  loginRecord: function(userName) {
-    wx.request({
-      url: this.data.serverHttp + '/user/login',
-      data: {
-        userName: userName,
-        status: '0'
-      },
-      method: 'POST',
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success: function(res) {
-
-      },
-      fail: function(resFail) {
-        console.log(JSON.stringify(resFail));
+  login: function (iv, encryptedData) {
+    wx.login({
+      success: res => {
+        // console.log(res)
+        if (res.errMsg == 'login:ok') {
+          //调用refreshTokeUrl接口刷新token
+          wx.request({
+            url: urlList.loginUrl,
+            method: 'POST',
+            data: { 
+              code: res.code,
+              iv,
+              encryptedData
+               },
+            // header: {
+            //   'Authorization': ''
+            // },
+            success: res => {
+              console.log(res)
+              if (res.data.code===30001){
+                wx.request({
+                  url: urlList.register,
+                  method: 'POST',
+                  data: {
+                    thirdPartUser: res.thirdPartUser
+                  },
+                  // header: {
+                  //   'Authorization': ''
+                  // },
+                  success: res => {
+                    console.log(res)
+                  }
+                });
+              }
+            }
+          })
+        }
       }
     });
   },
-  // 查询标注接口
-  queryRecord: function(req, fn) {
-    const that = this;
-    wx.request({
-      url: that.data.serverHttp + '/company/queryOne',
-      data: req || {},
-      method: 'POST',
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success: function(res) {
-        if (res && res.data) {
-          that.setData({
-            company: res.data
-          });
-          if (fn) {
-            fn(res);
-          }
-        }
-      },
-      fail: function(resFail) {
-        console.log(JSON.stringify(resFail));
-      }
-    });
-  },
-  // 保存标注接口
-  saveRecord: function(req) {
-    var that = this;
-    wx.request({
-      url: that.data.serverHttp + '/company/addRecord',
-      data: req,
-      method: 'POST',
-      // header: {
-      //   'content-type': 'json' //不能写"application/json"否则报400错误。
-      // },
-      success: function(res) {
-        if (res.statusCode === 200) {
-          wx.showToast({
-            title: '保存成功',
-            icon: 'succes',
-            duration: 1000,
-            mask: true
-          });
-        }
-      },
-      fail: function(resFail) {}
-    });
-  },
-  getUrl: function(e) {
-    this.setData({
-      dialogUrl: e.detail.value
-    });
-  },
-  cancel: function() {
-    this.setData({
-      isHideDialog: true
-    });
-  },
-  confirm: function() {
-    this.setData({
-      isHideDialog: true
-    });
-    if (this.data.dialogUrl) {
-      wx.setStorageSync('serverIP', this.data.dialogUrl);
-      this.setData({
-        serverHttp: this.data.dialogUrl
-      });
-      this.getOne();
-    }
-  }
-
-
+  
 })
