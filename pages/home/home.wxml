@@ -1,0 +1,44 @@
+<!--index.wxml-->
+<view class="container">
+  <block wx:if="!token">
+    <view class="login-tip-con">
+      <view class="login-tip">
+        <text>登录或注册风图数据账号后，您可查看首页列表</text>
+      </view>
+      <view class="login-btn">
+        <button class="user-info-btn" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 立即登录 </button>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="user-info-con">
+      <block wx:if="{{!hasUserInfo && canIUse}}">
+        <button class="user-info-btn" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 登录 </button>
+        <text class="userinfo-nickname"></text>
+      </block>
+      <block wx:else>
+        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        <!-- <text class="userinfo-nickname">{{userInfo.nickName}}</text> -->
+      </block>
+    </view>
+    <view class="home-header-con">
+      <view class="search-mark-con">
+        <input confirm-type="search" class="search-mark-input" value="{{searchValue}}" placeholder="请输入完整的公司名称" type="text" bindinput="getSearchVal" bindconfirm="searchOne"></input>
+        <button type="search" class="search-mark-btn" bindtap='searchOne'>搜索</button>
+      </view>
+    </view>
+    <view class="home-body-con">
+      <scroll-view scroll-y="true" bindscrolltolower="lower">
+        <block wx:for="{{mockList}}">
+          <navigator url="/pages/detailList/detailList?id={{item.id}}" hover-class="navigator-hover">
+            <image src="{{item.icon}}" class="pic"></image>
+            <view class="right">
+              <view class="title">{{item.name}}</view>
+              <view class="updateTime">更新时间：{{item.updateTime}}</view>
+            </view>
+          </navigator>
+        </block>
+      </scroll-view>
+    </view>
+  </block>
+</view>

@@ -7,10 +7,8 @@ Page({
   data: {
     userInfo: {},
     hasUserInfo: false,
+    token: null,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    serverHttp: 'http://58.213.91.74:21381/springbootdemo-0.0.1-SNAPSHOT', // 默认请求地址
-    animation: '',
-    // categoryList: ['企业', '人才', '资金', '政策'],
     mockList: [{
         id: '001',
         icon: '../../images/home_s.png',
@@ -50,13 +48,23 @@ Page({
     ]
   },
   onLoad: function(options) {
-    // this.login();
-    if (app.globalData.userInfo) {
+    if (app.globalData.user) {
       this.setData({
-        userInfo: app.globalData.userInfo,
+        userinfo: app.globalData.user,
         hasUserInfo: true
       });
-      // this.loginRecord(app.globalData.userInfo.nickName);
+      if (app.globalData.token) {
+        that.setData({
+          token: app.globalData.token
+        });
+      } else {
+        // 获取token
+        const {
+          iv,
+          encryptedData
+        } = app.globalData.user;
+        this.login(iv, encryptedData);
+      }
 
     } else if (this.data.canIUse) {
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
@@ -71,62 +79,33 @@ Page({
       // 在没有 open-type=getUserInfo 版本的兼容处理
       wx.getUserInfo({
         success: res => {
-          app.globalData.userInfo = res.userInfo;
+          app.globalData.user = res.user;
           this.setData({
             userInfo: res.userInfo,
             hasUserInfo: true
           });
-
         }
       });
     }
-    if (!this.data.hasUserInfo) {
-      // this.getUserInfo();
-    }
-    //实例化一个动画
-    this.animation = wx.createAnimation({
-      // 动画持续时间，单位ms，默认值 400
-      duration: 1000,
-      /**
-       * http://cubic-bezier.com/#0,0,.58,1  
-       *  linear  动画一直较为均匀
-       *  ease    从匀速到加速在到匀速
-       *  ease-in 缓慢到匀速
-       *  ease-in-out 从缓慢到匀速再到缓慢
-       * 
-       *  http://www.tuicool.com/articles/neqMVr
-       *  step-start 动画一开始就跳到 100% 直到动画持续时间结束 一闪而过
-       *  step-end   保持 0% 的样式直到动画持续时间结束        一闪而过
-       */
-      timingFunction: 'linear',
-      // 延迟多长时间开始
-      delay: 100,
-      /**
-       * 以什么为基点做动画  效果自己演示
-       * left,center right是水平方向取值，对应的百分值为left=0%;center=50%;right=100%
-       * top center bottom是垂直方向的取值，其中top=0%;center=50%;bottom=100%
-       */
-      transformOrigin: 'left top 0',
-      success: function(res) {
-        console.log(res)
-      }
-    });
   },
   getUserInfo: function(e) {
     var that = this;
-    wx.getUserInfo({
-      success: res => {
-        app.globalData.userInfo = res.userInfo
-        // console.log(res.userInfo);
-        that.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        });
-        const { iv, encryptedData} = res;
-        that.login(iv, encryptedData);
-      },
-      fail: resfail => console.log(resfail)
-    });
+    if (e.detail && e.detail.userInfo) {
+      app.globalData.user = e.detail;
+      that.setData({
+        userInfo: e.detail.userInfo,
+        hasUserInfo: true
+      });
+      const {
+        iv,
+        encryptedData
+      } = e.detail;
+      that.login(iv, encryptedData);
+    } else {
+      wx.navigateTo({
+        url: '/pages/login/login'
+      })
+    }
   },
   //实时获取查询输入框值
   getSearchVal: function(e) {
@@ -135,37 +114,41 @@ Page({
     });
   },
   //登录接口
-  login: function (iv, encryptedData) {
+  login: function(iv, encryptedData) {
+    var that = this;
     wx.login({
       success: res => {
         // console.log(res)
         if (res.errMsg == 'login:ok') {
           //调用refreshTokeUrl接口刷新token
           wx.request({
-            url: urlList.loginUrl,
+            url: urlList.login,
             method: 'POST',
-            data: { 
+            data: {
               code: res.code,
               iv,
               encryptedData
-               },
-            // header: {
-            //   'Authorization': ''
-            // },
+            },
             success: res => {
               console.log(res)
-              if (res.data.code===30001){
+              if (res.data.token) {
+                that.setData({
+                  token: res.data.token
+                });
+                app.globalData.token = res.data.token;
+              } else if (res.data.code === 30001) {
+                // 用户未注册/绑定小程序
                 wx.request({
-                  url: urlList.register,
+                  url: urlList.reglogin,
                   method: 'POST',
                   data: {
-                    thirdPartUser: res.thirdPartUser
+                    thirdPartUser: res.data.thirdPartUser
                   },
-                  // header: {
-                  //   'Authorization': ''
-                  // },
                   success: res => {
-                    console.log(res)
+                    app.globalData.token = res.data.token;
+                    that.setData({
+                      token: res.data.token
+                    });
                   }
                 });
               }
@@ -175,5 +158,5 @@ Page({
       }
     });
   },
-  
+
 })

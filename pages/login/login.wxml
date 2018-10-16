@@ -1,0 +1,18 @@
+<!--login.wxml-->
+<view class="container">
+  <view class="login-form">
+    <view class="input-con">
+      <text>用户名</text>
+      <input type='text' bindinput="bindNameInput" placeholder="请输入用户名" />
+    </view>
+    <view class="input-split">
+    </view>
+    <view class="input-con">
+      <text>密码</text>
+      <input type='text' password bindinput="bindPwdInput" placeholder="请输入密码" />
+    </view>
+  </view>
+  <view class="login-btn-con">
+    <button class="login-btn" bindtap="loginTap">登录</button>
+  </view>
+</view>
