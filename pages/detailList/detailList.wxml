@@ -11,10 +11,10 @@
     </block>
   </view>
   <view class="obj-con">
-    <image src="{{obj.icon}}" class="pic"></image>
+    <image src="{{view.icon}}" class="pic"></image>
     <view class="right">
-      <view class="title">{{obj.name}}</view>
-      <view class="updateTime">更新时间：{{obj.updateTime}}</view>
+      <view class="title">{{view.name}}</view>
+      <view class="updateTime">更新时间：{{view.createTime}}</view>
     </view>
   </view>
   <view class="category-con">
@@ -27,12 +27,12 @@
   </view>
   <view class="scroll-con">
     <scroll-view scroll-y style="height: 780rpx;" bindscrolltolower="lower">
-      <block wx:for="{{mockList}}">
+      <block wx:for="{{nodes}}">
         <navigator url="/pages/detail/detail?id={{item.id}}" hover-class="navigator-hover">
           <image src="{{item.icon}}" class="pic"></image>
           <view class="right">
             <view class="title">{{item.name}}</view>
-            <view class="updateTime">{{item.label}}</view>
+            <view class="updateTime">{{item.tag}}</view>
           </view>
         </navigator>
       </block>

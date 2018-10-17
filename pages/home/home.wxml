@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <view class="container">
-  <block wx:if="!token">
+  <block wx:if="{{!token}}">
     <view class="login-tip-con">
       <view class="login-tip">
         <text>登录或注册风图数据账号后，您可查看首页列表</text>
@@ -29,12 +29,12 @@
     </view>
     <view class="home-body-con">
       <scroll-view scroll-y="true" bindscrolltolower="lower">
-        <block wx:for="{{mockList}}">
-          <navigator url="/pages/detailList/detailList?id={{item.id}}" hover-class="navigator-hover">
+        <block wx:for="{{views}}">
+          <navigator url="/pages/detailList/detailList?viewId={{item.viewId}}" hover-class="navigator-hover">
             <image src="{{item.icon}}" class="pic"></image>
             <view class="right">
               <view class="title">{{item.name}}</view>
-              <view class="updateTime">更新时间：{{item.updateTime}}</view>
+              <view class="updateTime">更新时间：{{item.createTime}}</view>
             </view>
           </navigator>
         </block>

@@ -1,6 +1,8 @@
 // pages/detail/detail.js
+// 引入配置文件config
+const urlList = require('../../utils/config.js');
 //获取应用实例
-const app = getApp();
+const app = getApp()
 Page({
 
   /**
@@ -11,12 +13,10 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    obj: {
-      id: '001',
-      name: '视图标题001',
-      icon: '../../images/home_s.png',
-      updateTime: '2018-10-02'
-    },
+    viewId: null,
+    nodes: [],
+    view: {},
+    edges: [],
     categoryList: ['企业', '人才', '资金', '政策'],
     mockList: [{
         id: '001',
@@ -98,34 +98,57 @@ Page({
    */
   onLoad: function(options) {
     this.setData({
-      text: options.id
+      viewId: options.viewId
     });
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      });
-    } else if (this.data.canIUse) {
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
+    // 加载用户视图
+    var that = this;
+    wx.request({
+      url: urlList.userView + '/' + this.data.viewId,
+      method: 'GET',
+      // data: {
+      //   userId: 1 || that.data.userId
+      // },
+      header: {
+        'Authorization': app.globalData.tokenParam.token
+        // 'Authorization': that.data.token
+      },
+      success: res => {
+        if (res && res.data && res.data.code === 0 && res.data.data) {
+          const { view, nodes, edges } = res.data.data;
+          that.setData({
+            view,
+            nodes,
+            edges
+          });
         }
-      });
-    }
+      }
+    })
+    // if (app.globalData.userInfo) {
+    //   this.setData({
+    //     userInfo: app.globalData.userInfo,
+    //     hasUserInfo: true
+    //   });
+    // } else if (this.data.canIUse) {
+    //   // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+    //   // 所以此处加入 callback 以防止这种情况
+    //   app.userInfoReadyCallback = res => {
+    //     this.setData({
+    //       userInfo: res.userInfo,
+    //       hasUserInfo: true
+    //     })
+    //   }
+    // } else {
+    //   // 在没有 open-type=getUserInfo 版本的兼容处理
+    //   wx.getUserInfo({
+    //     success: res => {
+    //       app.globalData.userInfo = res.userInfo
+    //       this.setData({
+    //         userInfo: res.userInfo,
+    //         hasUserInfo: true
+    //       })
+    //     }
+    //   });
+    // }
   },
 
   getUserInfo: function(e) {

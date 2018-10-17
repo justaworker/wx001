@@ -8,55 +8,44 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     token: null,
+    userId: null,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    mockList: [{
-        id: '001',
-        icon: '../../images/home_s.png',
-        name: '视图标题001',
-        updateTime: '2018-10-02'
-      },
-      {
-        id: '002',
-        icon: '../../images/home_s.png',
-        name: '视图标题002',
-        updateTime: '2018-10-02'
-      },
-      {
-        id: '003',
-        icon: '../../images/home_s.png',
-        name: '视图标题003',
-        updateTime: '2018-10-02'
-      },
-      {
-        id: '004',
-        icon: '../../images/home_s.png',
-        name: '视图标题004',
-        updateTime: '2018-10-02'
-      },
-      {
-        id: '005',
-        icon: '../../images/home_s.png',
-        name: '视图标题005',
-        updateTime: '2018-10-02'
-      },
-      {
-        id: '006',
-        icon: '../../images/home_s.png',
-        name: '视图标题006',
-        updateTime: '2018-10-02'
-      },
-    ]
+    views: [],
+    isGoBack: false
+  },
+  onShow: function(options) {
+    // 登录页面返回后
+    if (this.data.isGoBack){
+      if (app.globalData.tokenParam) {
+        this.setData({
+          token: app.globalData.tokenParam.token,
+          userId: app.globalData.tokenParam.userId
+        });
+        this.reloadView();
+      }
+
+      if (app.globalData.user) {
+        this.setData({
+          userinfo: app.globalData.user,
+          hasUserInfo: true
+        });
+      }
+    }
   },
   onLoad: function(options) {
+    var that = this;
+    // app.setWatcher(this.data, this.watch);
     if (app.globalData.user) {
       this.setData({
         userinfo: app.globalData.user,
         hasUserInfo: true
       });
-      if (app.globalData.token) {
+      if (app.globalData.tokenParam) {
         that.setData({
-          token: app.globalData.token
+          token: app.globalData.tokenParam.token,
+          userId: app.globalData.tokenParam.userId
         });
+        that.reloadView();
       } else {
         // 获取token
         const {
@@ -70,20 +59,49 @@ Page({
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
       // 所以此处加入 callback 以防止这种情况
       app.userInfoReadyCallback = res => {
-        this.setData({
+        app.globalData.user = res;
+        that.setData({
           userInfo: res.userInfo,
           hasUserInfo: true
-        })
+        });
+        if (app.globalData.tokenParam) {
+          that.setData({
+            token: app.globalData.tokenParam.token,
+            userId: app.globalData.tokenParam.userId
+          });
+          that.reloadView();
+        } else {
+          // 获取token
+          const {
+            iv,
+            encryptedData
+          } = app.globalData.user;
+          that.login(iv, encryptedData);
+        }
       }
     } else {
       // 在没有 open-type=getUserInfo 版本的兼容处理
       wx.getUserInfo({
         success: res => {
-          app.globalData.user = res.user;
-          this.setData({
+          app.globalData.user = res;
+          that.setData({
             userInfo: res.userInfo,
             hasUserInfo: true
           });
+          if (app.globalData.tokenParam) {
+            that.setData({
+              token: app.globalData.tokenParam.token,
+              userId: app.globalData.tokenParam.userId
+            });
+            that.reloadView();
+          } else {
+            // 获取token
+            const {
+              iv,
+              encryptedData
+            } = app.globalData.user;
+            that.login(iv, encryptedData);
+          }
         }
       });
     }
@@ -130,12 +148,17 @@ Page({
               encryptedData
             },
             success: res => {
-              console.log(res)
-              if (res.data.token) {
+              // console.log(res)
+              if (res.data && res.data.token) {
+                app.globalData.tokenParam = {
+                  token: res.data.token,
+                  userId: res.data.user.userId
+                };
                 that.setData({
-                  token: res.data.token
+                  token: res.data.token,
+                  userId: res.data.user.userId
                 });
-                app.globalData.token = res.data.token;
+                that.reloadView();
               } else if (res.data.code === 30001) {
                 // 用户未注册/绑定小程序
                 wx.request({
@@ -145,11 +168,28 @@ Page({
                     thirdPartUser: res.data.thirdPartUser
                   },
                   success: res => {
-                    app.globalData.token = res.data.token;
-                    that.setData({
-                      token: res.data.token
-                    });
+                    if (res.data && res.data.token) {
+                      app.globalData.tokenParam = {
+                        token: res.data.token,
+                        userId: res.data.user.userId
+                      };
+                      that.setData({
+                        token: res.data.token,
+                        userId: res.data.user.userId
+                      });
+                      that.reloadView();
+                    } else {
+                      wx.showToast({
+                        title: 'request fail',
+                        icon: 'error'
+                      });
+                    }
                   }
+                });
+              } else {
+                wx.showToast({
+                  title: 'request fail',
+                  icon: 'error'
                 });
               }
             }
@@ -158,5 +198,26 @@ Page({
       }
     });
   },
-
+  reloadView() {
+    // 加载用户视图列表
+    var that = this;
+    wx.request({
+      url: urlList.userViewList + '/' + (1 || that.data.userId),
+      method: 'GET',
+      // data: {
+      //   userId: 1 || that.data.userId
+      // },
+      header: {
+        // 'Authorization': app.globalData.tokenParam.token
+        'Authorization': that.data.token
+      },
+      success: res => {
+        if (res && res.data && res.data.code === 0 && res.data.data) {
+          that.setData({
+            views: res.data.data
+          });
+        }
+      }
+    })
+  }
 })

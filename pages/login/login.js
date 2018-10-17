@@ -22,17 +22,33 @@ Page({
           username: this.data.nameValue
         },
         success: res => {
-          app.globalData.token = res.data.token;
-          wx.navigateBack({
-            delta: 2
-          });
+          if (res.data && res.data.code===0 && res.data.token) {
+            app.globalData.tokenParam = {
+              token: res.data.token,
+              userId: res.data.user.userId
+            };
+            app.globalData.user = res.data.user;
+            const pages = getCurrentPages();
+            const perPage = pages[pages.length - 2];
+            perPage.setData({
+              isGoBack: true
+            });
+            wx.navigateBack({
+              delta: 2
+            });
+          } else {
+            wx.showToast({
+              title: 'request fail',
+              icon: 'error'
+            });
+          }
         }
       });
     } else {
       wx.showToast({
         title: '请输入正确的用户名和密码',
         icon: 'none'
-      })
+      });
     }
 
   },
