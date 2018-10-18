@@ -17,53 +17,78 @@
       <view class="updateTime">更新时间：{{view.createTime}}</view>
     </view>
   </view>
-  <view class="category-con">
-    <view class="left-con">
-      <text class="category-name" wx:for="{{categoryList}}">{{item}}</text>
-    </view>
-    <view class="right-con">
-      <text class="category-name">{{'关联数据'}}</text>
-    </view>
-  </view>
-  <view class="scroll-con">
-    <scroll-view scroll-y style="height: 780rpx;" bindscrolltolower="lower">
-      <block wx:for="{{nodes}}">
-        <navigator url="/pages/detail/detail?id={{item.id}}" hover-class="navigator-hover">
-          <image src="{{item.icon}}" class="pic"></image>
-          <view class="right">
-            <view class="title">{{item.name}}</view>
-            <view class="updateTime">{{item.tag}}</view>
-          </view>
-        </navigator>
-      </block>
-    </scroll-view>
-  </view>
-  <view class="upload_con">
-    <view class="upload_btn" bindtap="toggleUploadPop">{{uploadPop ? '取消': '上传'}}</view>
-    <view class="upload_pop"  wx:if="{{uploadPop}}">
-      上传弹框
-      <view class="edit-con">
-        <view class="textarea-con">
-          <textarea placeholder="输入点什么吧..." class="textarea"></textarea>
-        </view>
-        <view class="images-con">
-          <block wx:for="{{images}}">
-            <view class="image-con">
-
-              <image class="image" src="{{item}}" mode="aspectFill" data-idx="{{index}}" bindtap="handleImagePreview"></image>
-
-              <image class="image-remover" data-idx="{{index}}" bindtap="removeImage" src="../../images/delete.png"> </image>
-            </view>
-          </block>
-          <image class="image image-add" src="../../images/add.png" ontap="chooseImage">add</image>
-        </view>
-        <!-- <view class="btn-con">
-          <button size="mini">reset</button>
-          <button size="mini">submit</button>
-        </view> -->
+  <block wx:if="{{!isShowData}}">
+    <view class="category-con">
+      <view class="left-con">
+        <text class="category-name {{item.name === category?'name-selected':''}}" wx:for="{{categorys}}" data-name="{{item.name}}" bindtap="tapName">{{item.name}}</text>
       </view>
-
+      <view class="right-con">
+        <text class="category-name" bindtap="showData">{{'关联数据'}}</text>
+      </view>
     </view>
+    <view class="scroll-con">
+      <scroll-view scroll-y style="height: 780rpx;" bindscrolltolower="lower">
+        <block wx:for="{{nodes[category]}}">
+          <navigator url="/pages/detail/detail?id={{item.id}}" hover-class="navigator-hover">
+            <image src="{{item.icon}}" class="pic"></image>
+            <view class="right">
+              <view class="title">{{item.label}}</view>
+              <view class="tag">{{item.tag}}</view>
+            </view>
+          </navigator>
+        </block>
+      </scroll-view>
+    </view>
+    <view class="upload_con">
+      <view class="upload_btn" bindtap="toggleUploadPop">{{uploadPop ? '取消': '上传'}}</view>
+      <view class="upload_pop" wx:if="{{uploadPop}}">
+        上传弹框
+        <view class="edit-con">
+          <view class="textarea-con">
+            <textarea placeholder="输入点什么吧..." class="textarea"></textarea>
+          </view>
+          <view class="images-con">
+            <block wx:for="{{images}}">
+              <view class="image-con">
+                <image class="image" src="{{item}}" mode="aspectFill" data-idx="{{index}}" bindtap="handleImagePreview"></image>
+                <image class="image-remover" data-idx="{{index}}" bindtap="removeImage" src="../../images/delete.png"> </image>
+              </view>
+            </block>
+            <image class="image image-add" src="../../images/add.png" ontap="chooseImage">add</image>
+          </view>
+          <button ontap="upLoad">上传文件</button>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="mask" catchtouchmove="preventTouchMove"></view>
+    <view class="modalDlg">
+      <view class="data-con">
+        <scroll-view scroll-y style="height: 100%;" bindscrolltolower="lower">
+        <view bindtap="hideData">点我关闭</view>
+          <view wx:for="{{datas}}">
+            <view>
+              <text>{{item.label}}</text>
+            </view>
+            <view>
+              <image src="{{item.icon}}" class="pic"></image>
+              <view class="right">
+                <view class="title">{{item.label}}</view>
+                <view class="tag">{{item.tag}}</view>
+              </view>
+            </view>
+            <view>
+              <image src="{{item.icon}}" class="pic"></image>
+              <view class="right">
+                <view class="title">{{item.label}}</view>
+                <view class="tag">{{item.tag}}</view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </block>
 
-  </view>
 </view>

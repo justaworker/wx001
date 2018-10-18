@@ -7,6 +7,7 @@
 
 .pic {
   width: 100rpx;
+  min-width: 100rpx;
   height: 100rpx;
   border-radius: 20rpx;
   border: 1px solid black;
@@ -66,14 +67,17 @@
 }
 
 .right {
-  /* width: 600rpx; */
-  height: 100rpx;
+  /* width: 600rpx; *//* height: 100rpx; */
   font-size: 30rpx;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   box-sizing: border-box;
   margin-left: 20rpx;
+}
+
+.right .tag {
+  margin-top: 20rpx;
 }
 
 .category-con .left-con {
@@ -95,7 +99,7 @@
   /* width: 98%; */
   border: 1px solid #aaa;
   border-radius: 4px;
-  padding:10rpx
+  padding: 10rpx;
 }
 
 .upload_con {
@@ -119,8 +123,7 @@
 }
 
 .upload_con .upload_pop {
-  /* background: rgb(200, 200, 200); */
-  /* background-color: #fff; *//* filter: blur(80rpx); *//* position: absolute;
+  /* background: rgb(200, 200, 200); *//* background-color: #fff; *//* filter: blur(80rpx); *//* position: absolute;
   bottom: 100%;
   width: 100%;
   height:1120rpx; */
@@ -182,4 +185,41 @@
 
 .images-con .image-add {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.name-selected {
+  color: aqua;
+}
+
+.data-con {
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  border-radius: 10rpx;
+}
+
+.mask{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    z-index: 9000;
+    opacity: 0.7;
+}
+
+.modalDlg{
+    width: 620rpx;
+    height: 760rpx;
+    position: fixed;
+    top: 50%;
+    left: 0;
+    z-index: 9999;
+    margin: -300rpx 65rpx;
+    background-color: #fff;
+    border-radius: 10rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

@@ -14,83 +14,24 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     viewId: null,
-    nodes: [],
+    nodes: {},
     view: {},
     edges: [],
-    categoryList: ['企业', '人才', '资金', '政策'],
-    mockList: [{
-        id: '001',
-        icon: '../../images/user_s.png',
-        name: '公司001',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '002',
-        icon: '../../images/user_s.png',
-        name: '公司002',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '003',
-        icon: '../../images/user_s.png',
-        name: '公司003',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '004',
-        icon: '../../images/user_s.png',
-        name: '公司004',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '005',
-        icon: '../../images/user_s.png',
-        name: '公司005',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '005',
-        icon: '../../images/user_s.png',
-        name: '公司005',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '005',
-        icon: '../../images/user_s.png',
-        name: '公司005',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '005',
-        icon: '../../images/user_s.png',
-        name: '公司005',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '005',
-        icon: '../../images/user_s.png',
-        name: '公司005',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '005',
-        icon: '../../images/user_s.png',
-        name: '公司005',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '005',
-        icon: '../../images/user_s.png',
-        name: '公司005',
-        label: '公司标签 公司标签 公司标签'
-      },
-      {
-        id: '005',
-        icon: '../../images/user_s.png',
-        name: '公司005',
-        label: '公司标签 公司标签 公司标签'
-      }
-    ]
+    categorys: [{
+      type: 0,
+      name: '标签'
+    }, {
+      type: 1,
+      name: '企业'
+    }, {
+      type: 2,
+      name: '人才'
+    }],
+    category: '',
+    isShowData: false,
+    datas: [],
+    images: [],
+    tempFilePaths: null
   },
 
   /**
@@ -98,7 +39,8 @@ Page({
    */
   onLoad: function(options) {
     this.setData({
-      viewId: options.viewId
+      viewId: options.viewId,
+      category: this.data.categorys[0].name
     });
     // 加载用户视图
     var that = this;
@@ -114,10 +56,29 @@ Page({
       },
       success: res => {
         if (res && res.data && res.data.code === 0 && res.data.data) {
-          const { view, nodes, edges } = res.data.data;
-          that.setData({
+          const {
             view,
             nodes,
+            edges
+          } = res.data.data;
+          let node;
+          const categorys = that.data.categorys;
+          let categoryNodes = {};
+          for (let node of nodes) {
+            let index = categorys.findIndex((item) => {
+              return item.type === node.type;
+            });
+            if (index > -1) {
+              if (categoryNodes[categorys[index].name]) {
+                categoryNodes[categorys[index].name].push(node);
+              } else {
+                categoryNodes[categorys[index].name] = [node];
+              }
+            }
+          }
+          that.setData({
+            view,
+            nodes: categoryNodes,
             edges
           });
         }
@@ -164,7 +125,47 @@ Page({
       fail: resfail => console.log(resfail)
     });
   },
-
+  tapName(e) {
+    this.setData({
+      category: e.currentTarget.dataset.name
+    });
+  },
+  showData() {
+    var that = this;
+    this.setData({
+      isShowData: true
+    });
+    wx.request({
+      url: urlList.viewData,
+      method: 'GET',
+      header: {
+        'Authorization': app.globalData.tokenParam.token
+      },
+      data: {
+        from: '',
+        to: '',
+        userId: this.data.view.userId,
+        viewId: this.data.view.viewId
+      },
+      success: res => {
+        if (res.data && res.data.code === 0 && res.data.data) {
+          this.setData({
+            datas: res.data.data
+          });
+        } else {
+          wx.showToast({
+            title: 'request fail',
+            icon: 'error'
+          });
+        }
+      }
+    });
+  },
+  hideData() {
+    this.setData({
+      isShowData: false
+    });
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -221,7 +222,7 @@ Page({
       uploadPop: !this.data.uploadPop
     });
   },
-  
+
   chooseImage: function(e) {
     var that = this;
     wx.chooseImage({
@@ -270,5 +271,28 @@ Page({
       urls: images, //所有要预览的图片
     })
   },
+  upLoad() {
+    wx.uploadFile({
+      url: urlList.upload,
+      filePath: this.data.images[0],
+      name: 'file',
+      header: {
+        'Authorization': app.globalData.tokenParam.token
+      },
+      formData: {
+        'from': '',
+        'to': '',
+        'remark': '	备注',
+        'type': 0,
+        'file': this.data.images[0],
+        'userId': this.data.view.userId,
+        'viewId': this.data.view.viewId
+      },
+      success(res) {
+        const data = res.data
+        //do something
+      }
+    })
+  }
 
 })

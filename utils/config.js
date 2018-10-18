@@ -7,5 +7,6 @@ const urlList = {
   userLogin: basePath + '/user/login',// 用户名密码登录
   userViewList: basePath + '/view/view/get/user',// 用户视图列表
   userView: basePath + '/view/graph/re/query',// 用户视图
+  viewData: basePath + '/view/project/file/list',// 关联数据
 }
 module.exports = urlList;
