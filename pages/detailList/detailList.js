@@ -293,6 +293,27 @@ Page({
         //do something
       }
     })
-  }
+  },
+  downLoad(e) {
+    const fileId = e.currentTarget.dataset.fileId
+    wx.request({
+      url: urlList.download +'/' +fileId,
+      method: 'GET',
+      header: {
+        'Authorization': app.globalData.tokenParam.token
+      },
+      // data: {
+      // },
+      success: res => {
+        if (res.data && res.data.code === 0 && res.data.data) {
+        } else {
+          wx.showToast({
+            title: 'request fail',
+            icon: 'error'
+          });
+        }
+      }
+    });
+  },
 
 })

@@ -66,23 +66,17 @@
     <view class="modalDlg">
       <view class="data-con">
         <scroll-view scroll-y style="height: 100%;" bindscrolltolower="lower">
-        <view bindtap="hideData">点我关闭</view>
+          <view bindtap="hideData">点我关闭</view>
           <view wx:for="{{datas}}">
             <view>
-              <text>{{item.label}}</text>
+              <text>{{item.remark}}</text>
             </view>
-            <view>
+            <view bindtap="downLoad" data-file-id="{{item.fileId}}">
               <image src="{{item.icon}}" class="pic"></image>
               <view class="right">
-                <view class="title">{{item.label}}</view>
-                <view class="tag">{{item.tag}}</view>
-              </view>
-            </view>
-            <view>
-              <image src="{{item.icon}}" class="pic"></image>
-              <view class="right">
-                <view class="title">{{item.label}}</view>
-                <view class="tag">{{item.tag}}</view>
+                <view class="title">
+                  <text clas="fileName">{{item.fileName.split('.')[0]}}</text>{{item.fileName && item.fileName.split('.')[1]}}</view>
+                <view class="tag">{{item.recordTime}}</view>
               </view>
             </view>
           </view>
