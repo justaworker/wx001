@@ -31,7 +31,11 @@ Page({
     isShowData: false,
     datas: [],
     images: [],
-    tempFilePaths: null
+    tempFilePaths: null,
+    downloadImage: null,
+    remarkVal: '',
+    downLoadUrl: urlList.download + '/',
+    downLoadToken: ''
   },
 
   /**
@@ -40,7 +44,8 @@ Page({
   onLoad: function(options) {
     this.setData({
       viewId: options.viewId,
-      category: this.data.categorys[0].name
+      category: this.data.categorys[0].name,
+      downLoadToken: '?Authorization=' + app.globalData.tokenParam.token
     });
     // 加载用户视图
     var that = this;
@@ -149,6 +154,16 @@ Page({
       },
       success: res => {
         if (res.data && res.data.code === 0 && res.data.data) {
+          res.data.data.forEach((item,index) => {
+            item.filePath = item.fileName && item.fileName.split('.') ? item.fileName.split('.')[0] : ''
+            item.fileType = item.fileName && item.fileName.split('.') ? item.fileName.split('.')[1] : ''
+            item.index = index
+            // if (item.fileId) {
+            //   that.downLoad({
+            //     fileId: item.fileId
+            //   }, true);
+            // }
+          });
           this.setData({
             datas: res.data.data
           });
@@ -223,6 +238,13 @@ Page({
     });
   },
 
+  //实时获取查询输入框值
+  getRemarkVal: function(e) {
+    this.setData({
+      remarkVal: e.detail.value
+    });
+  },
+
   chooseImage: function(e) {
     var that = this;
     wx.chooseImage({
@@ -272,7 +294,7 @@ Page({
     })
   },
   upLoad() {
-    wx.uploadFile({
+    const uploadTask = wx.uploadFile({
       url: urlList.upload,
       filePath: this.data.images[0],
       name: 'file',
@@ -282,38 +304,72 @@ Page({
       formData: {
         'from': '',
         'to': '',
-        'remark': '	备注',
+        'remark': this.data.remarkVal,
         'type': 0,
         'file': this.data.images[0],
         'userId': this.data.view.userId,
         'viewId': this.data.view.viewId
       },
       success(res) {
-        const data = res.data
+        if (res && res.data){
+          wx.showToast({
+            title: '上传成功',
+            icon: 'success'
+          });
+        } else {
+          wx.showToast({
+            title: 'upLoad fail',
+            icon: 'error'
+          });
+        }
         //do something
       }
+    });
+    uploadTask.onProgressUpdate((res) => {
+      console.log('上传进度', res.progress)
+      console.log('已经上传的数据长度', res.totalBytesSent)
+      console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
     })
   },
   downLoad(e) {
+    // 接口返回后直接预览和点击预览
     const fileId = e.currentTarget.dataset.fileId
-    wx.request({
-      url: urlList.download +'/' +fileId,
-      method: 'GET',
+    const idx = e.currentTarget.dataset.idx
+    var that = this;
+    wx.downloadFile({
+      url: urlList.download + '/' + fileId,
       header: {
         'Authorization': app.globalData.tokenParam.token
       },
-      // data: {
-      // },
-      success: res => {
-        if (res.data && res.data.code === 0 && res.data.data) {
+      success(res) {
+        if (res.tempFilePath) {
+          item.image = res.tempFilePath;
+          that.changeItemInArray(item);
+          // that.setData({
+          //   downloadImage: res.tempFilePath
+          // });
         } else {
-          wx.showToast({
-            title: 'request fail',
-            icon: 'error'
-          });
+          // wx.showToast({
+          //   title: 'request fail',
+          //   icon: 'error'
+          // });
         }
       }
     });
   },
+  changeItemInArray: function (item) {
+
+    // 提前准备好对象
+    var dataItem = this.data.datas[item.index];
+    dataItem.image = item.image;
+    // 依旧是根据index获取数组中的对象
+    var key = "datas[" + item.index + "]"
+
+    this.setData({
+      // 这里使用键值对方式赋值
+      key: dataItem
+    })
+    console.log(this.data.datas);
+  }
 
 })

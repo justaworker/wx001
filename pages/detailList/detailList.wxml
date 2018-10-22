@@ -45,7 +45,7 @@
         上传弹框
         <view class="edit-con">
           <view class="textarea-con">
-            <textarea placeholder="输入点什么吧..." class="textarea"></textarea>
+            <textarea bindinput="getRemarkVal" placeholder="输入点什么吧..." class="textarea"></textarea>
           </view>
           <view class="images-con">
             <block wx:for="{{images}}">
@@ -65,18 +65,35 @@
     <view class="mask" catchtouchmove="preventTouchMove"></view>
     <view class="modalDlg">
       <view class="data-con">
-        <scroll-view scroll-y style="height: 100%;" bindscrolltolower="lower">
-          <view bindtap="hideData">点我关闭</view>
-          <view wx:for="{{datas}}">
-            <view>
-              <text>{{item.remark}}</text>
+        <view class="data-head-con">
+          关联数据
+          <view class="close-icon" bindtap="hideData">x</view>
+        </view>
+        <scroll-view scroll-y bindscrolltolower="lower">
+          <view class="data-item-con" wx:for="{{datas}}">
+            <view class="step-con">
+              <view class="step-header">
+                <view class="step-line"></view>
+                <view class="step-icon">
+                </view>
+              </view>
+              <view class="step-main data-remake-con">
+                <text>{{item.remark}}</text>
+              </view>
             </view>
-            <view bindtap="downLoad" data-file-id="{{item.fileId}}">
-              <image src="{{item.icon}}" class="pic"></image>
-              <view class="right">
-                <view class="title">
-                  <text clas="fileName">{{item.fileName.split('.')[0]}}</text>{{item.fileName && item.fileName.split('.')[1]}}</view>
-                <view class="tag">{{item.recordTime}}</view>
+            <view class="step-con" data-file-id="{{item.fileId}}" data-idx="{{item.index}}">
+              <view class="step-header">
+                <!-- <view class="step-line"></view> -->
+                <view class="step-icon">
+                </view>
+              </view>
+              <view class="step-main data-image-con">
+                <image src="{{downLoadUrl+item.fileId + downLoadToken}}" class="downLoad-pic"></image>
+                <view class="data-image-con-right">
+                  <view class="title">
+                    <text class="file-name">{{item.filePath}}</text>{{item.fileType}}</view>
+                  <view class="tag">{{item.recordTime}}</view>
+                </view>
               </view>
             </view>
           </view>
