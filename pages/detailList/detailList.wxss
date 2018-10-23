@@ -297,6 +297,10 @@
   margin-left: 20rpx;
 }
 
+.data-image-con-right .tag{
+  margin-top: 40rpx;
+}
+
 .file-name {
   width: 260rpx;
   overflow: hidden;

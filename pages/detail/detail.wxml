@@ -11,54 +11,123 @@
     </block>
   </view>
   <view class="obj-con">
-    <image src="{{obj.icon}}" class="pic"></image>
+    <image src="{{view.icon}}" class="pic"></image>
     <view class="right">
-      <view class="title">{{obj.name}}</view>
-      <view class="updateTime">更新时间：{{obj.updateTime}}</view>
+      <view class="title">{{view.label}}</view>
+      <view class="updateTime">更新时间：{{view.createTime}}</view>
     </view>
   </view>
-  <view class="category-con">
-    <view class="left-con">
-      <text class="category-name" wx:for="{{categoryList}}" data-name="{{item}}" bindtap="tapName">{{item}}</text>
+  <block wx:if="{{!isShowData}}">
+    <view class="category-con">
+      <view class="left-con">
+        <text class="category-name {{item.name === category?'name-selected':''}}" wx:for="{{categorys}}" data-name="{{item.name}}" bindtap="tapName">{{item.name}}</text>
+      </view>
+      <view class="right-con">
+        <text class="category-name" bindtap="showData">{{'关联数据'}}</text>
+      </view>
     </view>
-    <view class="right-con">
-      <text class="category-name" data-name="关联数据" bindtap="tapName">{{'关联数据'}}</text>
-    </view>
-  </view>
-  <view wx:if="{{curContent === '基本信息'}}" class="content-con">
-    {{content.id}} {{content.text}}
-  </view>
-  <view wx:elif="{{curContent === '连接节点'}}" class="list-con">
-    <scroll-view scroll-y="true" style="height:400px" bindscrolltolower="lower">
-      <block wx:for="{{mockList}}">
-        <navigator url="/pages/detail/detail?id={{item.id}}" hover-class="navigator-hover">
-          <image src="{{item.icon}}" class="pic"></image>
-          <view class="right">
-            <view class="title">{{item.name}}</view>
-            <view class="updateTime">{{item.label}}</view>
+    <view class="scroll-con">
+      <block wx:if="{{category==='基本信息'}}">
+        <view hover-class="navigator-hover">
+          <view wx:for="{{view.pap}}">
+            <text>{{'论文名称: '+ item.pap_title}}</text>
+            <text>{{'论文标签: '+ item.tag}}</text>
           </view>
-        </navigator>
-      </block>
-    </scroll-view>
-  </view>
-  <view wx:else class="edit-con">
-    <view class="textarea-con">
-      <textarea placeholder="输入点什么吧..." class="textarea"></textarea>
-    </view>
-    <view class="images-con">
-      <block wx:for="{{images}}">
-        <view class="image-con">
-          <!-- 图片缩略图  -->
-          <image class="image" src="{{item}}" mode="aspectFill" data-idx="{{index}}" bindtap="handleImagePreview"></image>
-          <!-- 移除图片的按钮  -->
-          <image class="image-remover" data-idx="{{index}}" bindtap="removeImage" src="../../images/delete.png"> </image>
+          <view wx:for="{{view.pat}}">
+            <text>{{'专利申请时间: '+ item.apply_date}}</text>
+            <text>{{'专利号: '+ item.apply_id}}</text>
+            <text>{{'专利类型: '+ item.apply_type}}</text>
+            <text>{{'专利名称	: '+ item.patent_name}}</text>
+          </view>
         </view>
       </block>
-      <image class="image image-add" src="../../images/add.png" ontap="chooseImage">add</image>
+      <block wx:if="{{category==='连接节点'}}">
+        <scroll-view scroll-y style="height: 780rpx;" bindscrolltolower="lower">
+          <view class="edge-node-con" hover-class="navigator-hover" wx:for="{{edgeNodes}}">
+            <image src="{{item.icon}}" class="pic"></image>
+            <view class="right">
+              <view class="title">{{item.label}}</view>
+              <view class="tag">{{item.tag}}</view>
+            </view>
+          </view>
+        </scroll-view>
+      </block>
     </view>
-    <view class="btn-con">
-      <button size="mini">reset</button>
-      <button size="mini">submit</button>
+    <view class="upload_con">
+      <view class="upload_btn" bindtap="toggleUploadPop">{{uploadPop ? '取消': '上传'}}</view>
+      <view class="upload_pop" wx:if="{{uploadPop}}">
+        上传弹框
+        <view class="edit-con">
+          <view class="textarea-con">
+            <textarea bindinput="getRemarkVal" placeholder="输入点什么吧..." class="textarea"></textarea>
+          </view>
+          <view class="images-con">
+            <block wx:for="{{images}}">
+              <view class="image-con">
+                <block wx:if="{{isVideo}}">
+                  <video id="videoPreview" class="image" src="{{item}}" mode="aspectFill" data-id="videoPreview" bindtap="handleVideoPreview">></video>
+                </block>
+                <block wx:else>
+                  <image class="image" src="{{item}} " mode="aspectFill" data-idx="{{index}}" bindtap="handleImagePreview"></image>
+                </block>
+                <image class="image-remover" data-idx="{{index}}" bindtap="removeImage" src="../../images/delete.png"> </image>
+              </view>
+            </block>
+            <!-- <image class="image image-add " src="../../images/add.png " ontap="chooseImage ">add</image> -->
+            <view wx:if="{{images.length===0 }}">
+              <button ontap="chooseImage">add image</button>
+              <button ontap="chooseVideo">add video</button>
+            </view>
+          </view>
+          <button ontap="upLoad">上传文件</button>
+        </view>
+      </view>
     </view>
-  </view>
+  </block>
+  <block wx:else>
+    <view class="mask" catchtouchmove="preventTouchMove"></view>
+    <view class="modalDlg">
+      <view class="data-con">
+        <view class="data-head-con">
+          关联数据
+          <view class="close-icon" bindtap="hideData">x</view>
+        </view>
+        <scroll-view scroll-y bindscrolltolower="lower">
+          <view class="data-item-con" wx:for="{{datas}}">
+            <view class="step-con">
+              <view class="step-header">
+                <view class="step-line"></view>
+                <view class="step-icon">
+                </view>
+              </view>
+              <view class="step-main data-remake-con">
+                <text>{{item.remark}}</text>
+              </view>
+            </view>
+            <view class="step-con">
+              <view class="step-header">
+                <!-- <view class="step-line "></view> -->
+                <view class="step-icon">
+                </view>
+              </view>
+              <view class="step-main data-image-con">
+                <block wx:if="{{item.type==0}}">
+                  <image src="{{downLoadUrl+item.fileId + downLoadToken}}" class="downLoad-pic"></image>
+                </block>
+                <block wx:if="{{item.type==1}}">
+                  <video src="{{downLoadUrl+item.fileId + downLoadToken}}" class="downLoad-pic"></video>
+                </block>
+                <view class="data-image-con-right">
+                  <view class="title">
+                    <text class="file-name" data-file-id="{{item.fileId}}" data-idx="{{item.index}}" bindtap="downLoad">{{item.filePath}}</text>{{item.fileType}}</view>
+                  <view class="tag">{{item.recordTime}}</view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </block>
+
 </view>

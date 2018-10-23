@@ -29,7 +29,7 @@
     <view class="scroll-con">
       <scroll-view scroll-y style="height: 780rpx;" bindscrolltolower="lower">
         <block wx:for="{{nodes[category]}}">
-          <navigator url="/pages/detail/detail?id={{item.id}}" hover-class="navigator-hover">
+          <navigator url="/pages/detail/detail?viewId={{viewId}}&type={{item.type}}&id={{item.id}}&jsonEdges={{jsonEdges}}&jsonNodes={{jsonNodes}}" hover-class="navigator-hover">
             <image src="{{item.icon}}" class="pic"></image>
             <view class="right">
               <view class="title">{{item.label}}</view>

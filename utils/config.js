@@ -9,5 +9,6 @@ const urlList = {
   viewData: basePath + '/view/project/file/list',// 关联数据
   upload: basePath + '/view/project/upload',// 上传 
   download: basePath + '/view/project/file',// 下载 
+  nodeDetail: basePath + '/view/graph/re/get',// 获取节点详情
 }
 module.exports = urlList;

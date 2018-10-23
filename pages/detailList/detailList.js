@@ -17,6 +17,8 @@ Page({
     nodes: {},
     view: {},
     edges: [],
+    jsonEdges:'',
+    jsonNodes: '',
     categorys: [{
       type: 0,
       name: '标签'
@@ -84,7 +86,9 @@ Page({
           that.setData({
             view,
             nodes: categoryNodes,
-            edges
+            edges,
+            jsonEdges: JSON.stringify(edges),
+            jsonNodes: JSON.stringify(nodes),
           });
         }
       }
