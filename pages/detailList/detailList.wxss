@@ -54,7 +54,14 @@
 
 .obj-con {
   display: flex;
+  overflow: hidden;
   width: 100%;
+}
+
+.obj-con .title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .category-con {
@@ -139,6 +146,14 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  padding: 0px 20rpx;
+  box-sizing: border-box;
+}
+
+.edit-con .edit-content {
+  margin-top: 20rpx;
+  border: 1px solid #ccc;
+  min-height: 300rpx;
 }
 
 .btn-con {
@@ -149,18 +164,21 @@
 }
 
 .textarea-con {
-  margin-top: 20px;
+  margin-top: 20rpx;
   display: flex;
 }
 
 .textarea-con textarea {
   width: 100%;
   padding: 10rpx;
+  min-height: 100rpx;
+  max-height: 200rpx;
 }
 
 .images-con {
   margin-top: 20px;
   display: flex;
+  position: relative;
 }
 
 .images-con .image-con {
@@ -183,8 +201,22 @@
   border-radius: 50%;
 }
 
-.images-con .image-add {
-  background-color: rgba(0, 0, 0, 0.1);
+.choose-btn {
+  width: 64rpx;
+  height: 64rpx;
+  margin-right: 20rpx;
+}
+
+.submit-btn-con {
+  display: flex;
+  margin-top: 60rpx;
+  width: 100%;
+}
+
+.submit-btn-con button {
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 28rpx;
 }
 
 .name-selected {
@@ -297,7 +329,7 @@
   margin-left: 20rpx;
 }
 
-.data-image-con-right .tag{
+.data-image-con-right .tag {
   margin-top: 40rpx;
 }
 

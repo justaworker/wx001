@@ -10,6 +10,7 @@
 
 .pic {
   width: 100rpx;
+  min-width:100rpx;
   height: 100rpx;
   border-radius: 20rpx;
   border: 1px solid black;
@@ -17,7 +18,7 @@
 
 .right {
   /* width: 600rpx; */
-  height: 100rpx;
+  /* height: 100rpx; */
   font-size: 30rpx;
   display: flex;
   flex-direction: column;
@@ -98,9 +99,9 @@ navigator {
 }
 
 .title {
-  overflow: hidden;
+  /* overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; */
 }
 
 .login-tip-con {

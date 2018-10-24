@@ -238,12 +238,19 @@ Page({
   onShareAppMessage: function() {
 
   },
+  
   /**
    * 用户点击上传
    */
-  toggleUploadPop: function() {
+  showUploadPop: function () {
     this.setData({
-      uploadPop: !this.data.uploadPop
+      uploadPop: true
+    });
+  },
+
+  hideUploadPop: function () {
+    this.setData({
+      uploadPop: false
     });
   },
 

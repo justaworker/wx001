@@ -17,7 +17,7 @@ Page({
     nodes: {},
     view: {},
     edges: [],
-    jsonEdges:'',
+    jsonEdges: '',
     jsonNodes: '',
     categorys: [{
       type: 0,
@@ -158,7 +158,7 @@ Page({
       },
       success: res => {
         if (res.data && res.data.code === 0 && res.data.data) {
-          res.data.data.forEach((item,index) => {
+          res.data.data.forEach((item, index) => {
             item.filePath = item.fileName && item.fileName.split('.') ? item.fileName.split('.')[0] : ''
             item.fileType = item.fileName && item.fileName.split('.') ? item.fileName.split('.')[1] : ''
             item.index = index
@@ -236,9 +236,15 @@ Page({
   /**
    * 用户点击上传
    */
-  toggleUploadPop: function() {
+  showUploadPop: function() {
     this.setData({
-      uploadPop: !this.data.uploadPop
+      uploadPop: true
+    });
+  },
+
+  hideUploadPop: function() {
+    this.setData({
+      uploadPop: false
     });
   },
 
@@ -249,35 +255,38 @@ Page({
     });
   },
 
-  chooseImage: function(e) {
+  chooseImage: function (e) {
     var that = this;
     wx.chooseImage({
-      // count: 1,
-      // sizeType: [],
-      // sourceType: [],
-      success: function(res) {
-        // const tempFilePaths = res.tempFilePaths;
-        const images = that.data.images.concat(res.tempFilePaths);
+      count: 1,
+      success: function (res) {
+        // const images = that.data.images.concat(res.tempFilePaths);
+        const images = res.tempFilePaths;
         // 限制最多只能留下3张照片
-        // this.data.images = images.length <= 3 ? images : images.slice(0, 3) 
         that.setData({
-          images: images.length <= 3 ? images : images.slice(0, 3)
+          images: images.length <= 3 ? images : images.slice(0, 3),
+          isVideo: false
         });
-        // wx.uploadFile({
-        //   url: 'https://example.weixin.qq.com/upload', //仅为示例，非真实的接口地址
-        //   filePath: tempFilePaths[0],
-        //   name: 'file',
-        //   formData: {
-        //     'user': 'test'
-        //   },
-        //   success(res) {
-        //     const data = res.data
-        //     //do something
-        //   }
-        // })
       },
-      fail: function(res) {},
-      complete: function(res) {},
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
+
+  chooseVideo: function (e) {
+    var that = this;
+    wx.chooseVideo({
+      sourceType: ['album', 'camera'],
+      maxDuration: 60,
+      camera: 'back',
+      success(res) {
+        console.log(res);
+        const images = [res.tempFilePath];
+        that.setData({
+          images: images,
+          isVideo: true
+        });
+      }
     })
   },
 
@@ -288,7 +297,11 @@ Page({
       images: this.data.images
     });
   },
-
+  handleVideoPreview(e) {
+    // const id = e.target.dataset.id
+    // const videoContext = wx.createVideoContext(id,e);
+    // videoContext.requestFullScreen(0);
+  },
   handleImagePreview(e) {
     const idx = e.target.dataset.idx
     const images = this.data.images
@@ -315,7 +328,7 @@ Page({
         'viewId': this.data.view.viewId
       },
       success(res) {
-        if (res && res.data){
+        if (res && res.data) {
           wx.showToast({
             title: '上传成功',
             icon: 'success'
@@ -361,7 +374,7 @@ Page({
       }
     });
   },
-  changeItemInArray: function (item) {
+  changeItemInArray: function(item) {
 
     // 提前准备好对象
     var dataItem = this.data.datas[item.index];

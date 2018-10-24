@@ -54,16 +54,16 @@
       </block>
     </view>
     <view class="upload_con">
-      <view class="upload_btn" bindtap="toggleUploadPop">{{uploadPop ? '取消': '上传'}}</view>
+      <view class="upload_btn" bindtap="showUploadPop">{{'上传'}}</view>
       <view class="upload_pop" wx:if="{{uploadPop}}">
-        上传弹框
         <view class="edit-con">
-          <view class="textarea-con">
-            <textarea bindinput="getRemarkVal" placeholder="输入点什么吧..." class="textarea"></textarea>
-          </view>
-          <view class="images-con">
-            <block wx:for="{{images}}">
-              <view class="image-con">
+          添加信息
+          <view clas="edit-content">
+            <view class="textarea-con">
+              <textarea auto-height bindinput="getRemarkVal" placeholder="请输入描述" class="textarea"></textarea>
+            </view>
+            <view class="images-con">
+              <view class="image-con" wx:for="{{images}}">
                 <block wx:if="{{isVideo}}">
                   <video id="videoPreview" class="image" src="{{item}}" mode="aspectFill" data-id="videoPreview" bindtap="handleVideoPreview">></video>
                 </block>
@@ -72,14 +72,17 @@
                 </block>
                 <image class="image-remover" data-idx="{{index}}" bindtap="removeImage" src="../../images/delete.png"> </image>
               </view>
-            </block>
-            <!-- <image class="image image-add " src="../../images/add.png " ontap="chooseImage ">add</image> -->
-            <view wx:if="{{images.length===0 }}">
-              <button ontap="chooseImage">add image</button>
-              <button ontap="chooseVideo">add video</button>
+              <!-- <image class="image image-add " src="../../images/add.png " ontap="chooseImage ">add</image> -->
+              <view class="upload-btn-con" wx:if="{{images.length===0 }}">
+                <image class="choose-btn" src="../../images/addImage.png" bindtap="chooseImage"></image>
+                <image class="choose-btn" src="../../images/addVideo.png" ontap="chooseVideo"></image>
+              </view>
+            </view>
+            <view class="submit-btn-con">
+              <button ontap="hideUploadPop">取消</button>
+              <button ontap="upLoad">确认</button>
             </view>
           </view>
-          <button ontap="upLoad">上传文件</button>
         </view>
       </view>
     </view>
