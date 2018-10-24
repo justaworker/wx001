@@ -250,7 +250,8 @@ Page({
 
   hideUploadPop: function () {
     this.setData({
-      uploadPop: false
+      uploadPop: false,
+      images: []
     });
   },
 
