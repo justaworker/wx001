@@ -184,8 +184,13 @@ Page({
     });
   },
   hideData() {
+    if (this.data.playVideoID) {
+      const preVideo = wx.createVideoContext(`video-${this.data.playVideoID}`);
+      preVideo.stop();
+    }
     this.setData({
-      isShowData: false
+      isShowData: false,
+      datas: []
     });
   },
   /**
