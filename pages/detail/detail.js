@@ -32,7 +32,9 @@ Page({
     tempFilePaths: null,
     remarkVal: '',
     downLoadUrl: urlList.download + '/',
-    downLoadToken: ''
+    downLoadToken: '',
+    isPreviewVideo: false,
+    palyVideoID:''
   },
 
   /**
@@ -251,7 +253,8 @@ Page({
   hideUploadPop: function () {
     this.setData({
       uploadPop: false,
-      images: []
+      images: [],
+      isPreviewVideo: false
     });
   },
 
@@ -306,9 +309,31 @@ Page({
   },
 
   handleVideoPreview(e) {
-    // const id = e.target.dataset.id
-    // const videoContext = wx.createVideoContext(id,e);
+    const id = e.target.dataset.id
+    const videoContext = wx.createVideoContext(id);
+    videoContext.requestFullScreen({
+      direction: 0
+    });
+    videoContext.play();
+    this.setData({
+      isPreviewVideo: true
+    });
     // videoContext.requestFullScreen(0);
+  },
+
+  playVideo(e) {
+    const id = e.target.dataset.id
+    if (id === this.data.playVideoID) {
+      // empty
+    } else {
+      const preVideo = wx.createVideoContext(`video-${this.data.playVideoID}`);
+      preVideo.stop();
+      const video = wx.createVideoContext(`video-${id}`);
+      video.play();
+      this.setData({
+        playVideoID: id
+      });
+    }
   },
 
   handleImagePreview(e) {

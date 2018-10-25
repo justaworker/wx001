@@ -48,17 +48,22 @@
             添加信息
             <view class="edit-content">
               <view class="textarea-con">
-                <textarea auto-height bindinput="getRemarkVal" placeholder="请输入描述" class="textarea"></textarea>
+                <textarea auto-height bindinput="getRemarkVal" placeholder="请输入描述" fixed class="textarea"></textarea>
               </view>
               <view class="images-con">
                 <view class="image-con" wx:for="{{images}}">
                   <block wx:if="{{isVideo}}">
-                    <video id="videoPreview" class="image" src="{{item}}" mode="aspectFill" data-id="videoPreview" bindtap="handleVideoPreview">></video>
+                    <video id="videoPreview" bindpause="hideVideo" bindended="hideVideo" class="image" src="{{isPreviewVideo && item}}" mode="aspectFill">
+                      <cover-view class="video-poster">
+                        <cover-image hidden="{{isPreviewVideo}}" src="../../images/videoPoster.png" data-id="videoPreview" bindtap="handleVideoPreview"></cover-image>
+                        <cover-image class="image-remover" src="../../images/delete.png" data-idx="{{index}}" bindtap="removeImage"></cover-image>
+                      </cover-view>
+                    </video>
                   </block>
                   <block wx:else>
                     <image class="image" src="{{item}} " mode="aspectFill" data-idx="{{index}}" bindtap="handleImagePreview"></image>
+                    <image class="image-remover" data-idx="{{index}}" bindtap="removeImage" src="../../images/delete.png"> </image>
                   </block>
-                  <image class="image-remover" data-idx="{{index}}" bindtap="removeImage" src="../../images/delete.png"> </image>
                 </view>
                 <!-- <image class="image image-add" src="../../images/add.png" ontap="chooseImage">add</image> -->
                 <view class="upload-btn-con" wx:if="{{images.length===0 }}">
@@ -84,7 +89,7 @@
           关联数据
           <view class="close-icon" bindtap="hideData">x</view>
         </view>
-        <scroll-view scroll-y bindscrolltolower="lower">
+        <scroll-view class="dialog-view" scroll-y bindscrolltolower="lower">
           <view class="data-item-con" wx:for="{{datas}}">
             <view class="step-con">
               <view class="step-header">
@@ -107,7 +112,11 @@
                   <image src="{{downLoadUrl+item.fileId + downLoadToken}}" class="downLoad-pic"></image>
                 </block>
                 <block wx:if="{{item.type==1}}">
-                  <video src="{{downLoadUrl+item.fileId + downLoadToken}}" class="downLoad-pic"></video>
+                  <video id="video-{{item.fileId}}" binderror="handleVideoError" controls="{{false}}" src="{{downLoadUrl+item.fileId + downLoadToken}}" class="downLoad-pic">
+                    <cover-view class="video-poster">
+                      <cover-image hidden="{{item.fileId === playVideoID}}" src="../../images/videoPoster.png" data-id="{{item.fileId}}" bindtap="playVideo"></cover-image>
+                    </cover-view>
+                  </video>
                 </block>
                 <view class="data-image-con-right">
                   <view class="title">

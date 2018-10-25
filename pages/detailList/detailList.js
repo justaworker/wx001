@@ -37,7 +37,10 @@ Page({
     downloadImage: null,
     remarkVal: '',
     downLoadUrl: urlList.download + '/',
-    downLoadToken: ''
+    downLoadToken: '',
+    isVideo: false,
+    isPreviewVideo: false,
+    palyVideoID: ''
   },
 
   /**
@@ -245,7 +248,8 @@ Page({
   hideUploadPop: function() {
     this.setData({
       uploadPop: false,
-      images: []
+      images: [],
+      isPreviewVideo: false
     });
   },
 
@@ -256,11 +260,11 @@ Page({
     });
   },
 
-  chooseImage: function (e) {
+  chooseImage: function(e) {
     var that = this;
     wx.chooseImage({
       count: 1,
-      success: function (res) {
+      success: function(res) {
         // const images = that.data.images.concat(res.tempFilePaths);
         const images = res.tempFilePaths;
         // 限制最多只能留下3张照片
@@ -269,12 +273,12 @@ Page({
           isVideo: false
         });
       },
-      fail: function (res) { },
-      complete: function (res) { },
+      fail: function(res) {},
+      complete: function(res) {},
     })
   },
 
-  chooseVideo: function (e) {
+  chooseVideo: function(e) {
     var that = this;
     wx.chooseVideo({
       sourceType: ['album', 'camera'],
@@ -290,18 +294,48 @@ Page({
       }
     })
   },
-
+  hideVideo() {
+    this.setData({
+      isPreviewVideo: false
+    });
+  },
   removeImage(e) {
     const idx = e.target.dataset.idx;
     this.data.images.splice(idx, 1);
     this.setData({
-      images: this.data.images
+      images: this.data.images,
+      isVideo: false,
+      isPreviewVideo: false
     });
   },
   handleVideoPreview(e) {
-    // const id = e.target.dataset.id
-    // const videoContext = wx.createVideoContext(id,e);
+    const id = e.target.dataset.id
+    this.setData({
+      isPreviewVideo: true
+    });
+    setTimeout(() => {
+      const videoContext = wx.createVideoContext(id);
+      videoContext.requestFullScreen({
+        direction: 0
+      });
+      videoContext.play();
+    }, 0);
+
     // videoContext.requestFullScreen(0);
+  },
+  playVideo(e) {
+    const id = e.target.dataset.id
+    if (id === this.data.playVideoID) {
+      // empty
+    } else {
+      const preVideo = wx.createVideoContext(`video-${this.data.playVideoID}`);
+      preVideo.stop();
+      const video = wx.createVideoContext(`video-${id}`);
+      video.play();
+      this.setData({
+        playVideoID: id
+      });
+    }
   },
   handleImagePreview(e) {
     const idx = e.target.dataset.idx
@@ -312,6 +346,7 @@ Page({
     })
   },
   upLoad() {
+    var that = this;
     const uploadTask = wx.uploadFile({
       url: urlList.upload,
       filePath: this.data.images[0],
@@ -323,7 +358,7 @@ Page({
         'from': '',
         'to': '',
         'remark': this.data.remarkVal,
-        'type': 0,
+        'type': this.data.isVideo ? 1 : 0,
         'file': this.data.images[0],
         'userId': this.data.view.userId,
         'viewId': this.data.view.viewId
@@ -333,6 +368,11 @@ Page({
           wx.showToast({
             title: '上传成功',
             icon: 'success'
+          });
+          that.setData({
+            remark: '',
+            images: [],
+            uploadPop: false
           });
         } else {
           wx.showToast({
@@ -388,6 +428,9 @@ Page({
       key: dataItem
     })
     console.log(this.data.datas);
+  },
+  errorTip(e) {
+    console.log(e);
   }
 
 })
