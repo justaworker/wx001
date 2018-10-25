@@ -190,6 +190,7 @@ Page({
     }
     this.setData({
       isShowData: false,
+      playVideoID: '',
       datas: []
     });
   },
