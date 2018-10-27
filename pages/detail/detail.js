@@ -138,10 +138,11 @@ Page({
       },
       success: res => {
         if (res.data && res.data.code === 0 && res.data.data) {
+          let pos;
           res.data.data.forEach((item, index) => {
-            item.filePath = item.fileName && item.fileName.split('.') ? item.fileName.split('.')[0] : ''
-            item.fileType = item.fileName && item.fileName.split('.') ? item.fileName.split('.')[1] : ''
-            item.index = index
+            pos = item.fileName ? item.fileName.lastIndexOf('.') : false;
+            item.filePath = pos ? item.fileName.substring(0, pos) : '';
+            item.fileType = pos ? item.fileName.substring(pos + 1) : '';
           });
           const jsonDatas = JSON.stringify(res.data.data);
           wx.navigateTo({

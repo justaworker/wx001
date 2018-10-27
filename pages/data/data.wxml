@@ -21,8 +21,8 @@
   </view>
 
   <view class="data-con">
-    <scroll-view class="dialog-view" scroll-y bindscrolltolower="lower">
-      <view class="data-item-con" wx:for="{{datas}}">
+    <scroll-view class="dialog-view" scroll-y>
+      <view class="data-item-con" wx:for="{{datas}}" wx:key="{{item.fileId}}">
 
         <view class="step-con">
           <view class="step-header">
