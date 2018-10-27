@@ -44,7 +44,8 @@ Page({
     this.setData({
       viewId: options.viewId,
       category: this.data.categorys[0].name,
-      downLoadToken: '?Authorization=' + app.globalData.tokenParam.token
+      downLoadToken: '?Authorization=' + app.globalData.tokenParam.token,
+      userInfo: app.globalData.userInfo
     });
     // 加载用户视图
     var that = this;

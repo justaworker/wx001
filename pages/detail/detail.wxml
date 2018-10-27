@@ -1,7 +1,7 @@
 <!--pages/detail/detail.wxml-->
 <view class="container">
   <view class="user-info-con">
-    <block wx:if="{{!hasUserInfo && canIUse}}">
+    <block wx:if="{{!userInfo}}">
       <button class="user-info-btn" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
       <text class="userinfo-nickname"></text>
     </block>

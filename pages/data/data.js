@@ -26,7 +26,8 @@ Page({
     this.setData({
       view: options.jsonView ? JSON.parse(options.jsonView) : {},
       downLoadToken: `?Authorization=${app.globalData.tokenParam.token}`,
-      datas: options.jsonDatas ? JSON.parse(options.jsonDatas) : []
+      datas: options.jsonDatas ? JSON.parse(options.jsonDatas) : [],
+      userInfo: app.globalData.userInfo
     });
   },
 
