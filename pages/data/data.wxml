@@ -1,0 +1,62 @@
+<!--pages/detail/detail.wxml-->
+<view class="container">
+
+  <view class="user-info-con">
+    <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+    <!-- <text class="userinfo-nickname">{{userInfo.nickName}}</text> -->
+  </view>
+
+  <view class="obj-con">
+    <image src="{{view.icon}}" class="pic"></image>
+    <view class="right">
+      <view class="title">{{view.label || view.name}}</view>
+      <view class="updateTime">更新时间：{{view.createTime}}</view>
+    </view>
+  </view>
+
+  <view class="data-con">
+    <scroll-view class="dialog-view" scroll-y bindscrolltolower="lower">
+      <view class="data-item-con" wx:for="{{datas}}">
+
+        <view class="step-con">
+          <view class="step-header">
+            <view class="step-line"></view>
+            <view class="step-icon">
+            </view>
+          </view>
+          <view class="step-main data-remake-con">
+            <text>{{item.remark}}</text>
+          </view>
+        </view>
+
+        <view class="step-con">
+          <view class="step-header">
+            <!-- <view class="step-line "></view> -->
+            <view class="step-icon">
+            </view>
+          </view>
+
+          <view class="step-main data-image-con">
+            <block wx:if="{{item.type==0}}">
+              <image data-imageurl="{{downLoadUrl+item.fileId + downLoadToken}}" src="{{downLoadUrl+item.fileId + downLoadToken}}" class="downLoad-pic" bindtap="previewImgByUrl"></image>
+            </block>
+            <block wx:if="{{item.type==1}}">
+              <video custom-cache="{{false}}" id="video-{{item.fileId}}" data-id="{{item.fileId}}" bindplay="onPlayVideo" binderror="handleVideoError" poster="../../images/videoPoster.png" src="{{downLoadUrl+item.fileId + downLoadToken}}" class="downLoad-pic">
+                <!-- <cover-view class="video-poster">
+                      <cover-image hidden="{{item.fileId === playVideoID}}" src="../../images/videoPoster.png" data-id="{{item.fileId}}" bindtap="playVideo"></cover-image>
+                    </cover-view> -->
+              </video>
+            </block>
+
+            <view class="data-image-con-right">
+              <view class="title">
+                <text class="file-name" data-file-id="{{item.fileId}}" data-idx="{{item.index}}" bindtap="downLoad">{{item.filePath}}</text>{{item.fileType}}</view>
+              <view class="tag">{{item.recordTime}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+</view>

@@ -16,6 +16,7 @@ Page({
     viewId: null,
     nodes: {},
     view: {},
+    remarkVal: '',
     edges: [],
     jsonEdges: '',
     jsonNodes: '',
@@ -30,17 +31,10 @@ Page({
       name: '人才'
     }],
     category: '',
-    isShowData: false,
-    datas: [],
     images: [],
     tempFilePaths: null,
-    downloadImage: null,
-    remarkVal: '',
-    downLoadUrl: urlList.download + '/',
-    downLoadToken: '',
     isVideo: false,
-    isPreviewVideo: false,
-    palyVideoID: ''
+    isPreviewVideo: false
   },
 
   /**
@@ -96,32 +90,6 @@ Page({
         }
       }
     })
-    // if (app.globalData.userInfo) {
-    //   this.setData({
-    //     userInfo: app.globalData.userInfo,
-    //     hasUserInfo: true
-    //   });
-    // } else if (this.data.canIUse) {
-    //   // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-    //   // 所以此处加入 callback 以防止这种情况
-    //   app.userInfoReadyCallback = res => {
-    //     this.setData({
-    //       userInfo: res.userInfo,
-    //       hasUserInfo: true
-    //     })
-    //   }
-    // } else {
-    //   // 在没有 open-type=getUserInfo 版本的兼容处理
-    //   wx.getUserInfo({
-    //     success: res => {
-    //       app.globalData.userInfo = res.userInfo
-    //       this.setData({
-    //         userInfo: res.userInfo,
-    //         hasUserInfo: true
-    //       })
-    //     }
-    //   });
-    // }
   },
 
   getUserInfo: function(e) {
@@ -137,13 +105,16 @@ Page({
       fail: resfail => console.log(resfail)
     });
   },
+
   tapName(e) {
     this.setData({
       category: e.currentTarget.dataset.name
     });
   },
+
   showData() {
-    var that = this;
+
+    const jsonView = JSON.stringify(this.data.view);
     this.setData({
       isShowData: true
     });
@@ -165,15 +136,11 @@ Page({
             item.filePath = item.fileName && item.fileName.split('.') ? item.fileName.split('.')[0] : ''
             item.fileType = item.fileName && item.fileName.split('.') ? item.fileName.split('.')[1] : ''
             item.index = index
-            // if (item.fileId) {
-            //   that.downLoad({
-            //     fileId: item.fileId
-            //   }, true);
-            // }
           });
-          this.setData({
-            datas: res.data.data
-          });
+          const jsonDatas = JSON.stringify(res.data.data);
+          wx.navigateTo({
+            url: '/pages/data/data?jsonDatas=' + jsonDatas + '&jsonView=' + jsonView,
+          })
         } else {
           wx.showToast({
             title: 'request fail',
@@ -182,65 +149,6 @@ Page({
         }
       }
     });
-  },
-  hideData() {
-    if (this.data.playVideoID) {
-      const preVideo = wx.createVideoContext(`video-${this.data.playVideoID}`);
-      preVideo.stop();
-    }
-    this.setData({
-      isShowData: false,
-      playVideoID: '',
-      datas: []
-    });
-  },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function() {
-
   },
   /**
    * 用户点击上传
@@ -300,11 +208,13 @@ Page({
       }
     })
   },
+
   hideVideo() {
     this.setData({
       isPreviewVideo: false
     });
   },
+
   removeImage(e) {
     const idx = e.target.dataset.idx;
     this.data.images.splice(idx, 1);
@@ -314,6 +224,7 @@ Page({
       isPreviewVideo: false
     });
   },
+
   handleVideoPreview(e) {
     const id = e.target.dataset.id
     this.setData({
@@ -329,28 +240,16 @@ Page({
 
     // videoContext.requestFullScreen(0);
   },
-  playVideo(e) {
-    const id = e.target.dataset.id
-    if (id === this.data.playVideoID) {
-      // empty
-    } else {
-      const preVideo = wx.createVideoContext(`video-${this.data.playVideoID}`);
-      preVideo.stop();
-      const video = wx.createVideoContext(`video-${id}`);
-      video.play();
-      this.setData({
-        playVideoID: id
-      });
-    }
-  },
+
   handleImagePreview(e) {
     const idx = e.target.dataset.idx
     const images = this.data.images
     wx.previewImage({
       current: images[idx], //当前预览的图片
-      urls: images, //所有要预览的图片
+      urls: images //所有要预览的图片
     })
   },
+
   upLoad() {
     var that = this;
     const uploadTask = wx.uploadFile({
@@ -395,48 +294,53 @@ Page({
       console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
     })
   },
-  downLoad(e) {
-    // 接口返回后直接预览和点击预览
-    const fileId = e.currentTarget.dataset.fileId
-    const idx = e.currentTarget.dataset.idx
-    var that = this;
-    wx.downloadFile({
-      url: urlList.download + '/' + fileId,
-      header: {
-        'Authorization': app.globalData.tokenParam.token
-      },
-      success(res) {
-        if (res.tempFilePath) {
-          item.image = res.tempFilePath;
-          that.changeItemInArray(item);
-          // that.setData({
-          //   downloadImage: res.tempFilePath
-          // });
-        } else {
-          // wx.showToast({
-          //   title: 'request fail',
-          //   icon: 'error'
-          // });
-        }
-      }
-    });
-  },
-  changeItemInArray: function(item) {
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function() {
 
-    // 提前准备好对象
-    var dataItem = this.data.datas[item.index];
-    dataItem.image = item.image;
-    // 依旧是根据index获取数组中的对象
-    var key = "datas[" + item.index + "]"
-
-    this.setData({
-      // 这里使用键值对方式赋值
-      key: dataItem
-    })
-    console.log(this.data.datas);
   },
-  errorTip(e) {
-    console.log(e);
-  }
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function() {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function() {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function() {
+
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function() {
+
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function() {
+
+  },
+
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+
+  },
 
 })

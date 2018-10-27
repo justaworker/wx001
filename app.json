@@ -4,6 +4,7 @@
     "pages/searchList/searchList",
     "pages/user/user",
     "pages/detail/detail",
+    "pages/data/data",
     "pages/detailList/detailList",
     "pages/login/login"
   ],

@@ -125,15 +125,20 @@ Page({
       })
     }
   },
+
   //实时获取查询输入框值
   getSearchVal: function(e) {
     this.setData({
       searchVal: e.detail.value
     });
   },
+
   //登录接口
   login: function(iv, encryptedData) {
     var that = this;
+    wx.showLoading({
+      title: '登录中...',
+    })
     wx.login({
       success: res => {
         // console.log(res)
@@ -150,6 +155,7 @@ Page({
             success: res => {
               // console.log(res)
               if (res.data && res.data.token) {
+                wx.hideLoading();
                 app.globalData.tokenParam = {
                   token: res.data.token,
                   userId: res.data.user.userId
@@ -168,6 +174,7 @@ Page({
                     thirdPartUser: res.data.thirdPartUser
                   },
                   success: res => {
+                    wx.hideLoading();
                     if (res.data && res.data.token) {
                       app.globalData.tokenParam = {
                         token: res.data.token,
@@ -179,6 +186,7 @@ Page({
                       });
                       that.reloadView();
                     } else {
+                      wx.hideLoading();
                       wx.showToast({
                         title: 'request fail',
                         icon: 'error'
@@ -187,6 +195,7 @@ Page({
                   }
                 });
               } else {
+                wx.hideLoading();
                 wx.showToast({
                   title: 'request fail',
                   icon: 'error'
@@ -198,6 +207,7 @@ Page({
       }
     });
   },
+  
   reloadView() {
     // 加载用户视图列表
     var that = this;
